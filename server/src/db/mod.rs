@@ -8,7 +8,7 @@ pub mod models;
 type Pool = diesel::r2d2::Pool<ConnectionManager<PgConnection>>;
 
 fn create_pool() -> Pool {
-    let manager = ConnectionManager::<PgConnection>::new(utils::env::DATABASE_URL.to_string());
+    let manager = ConnectionManager::<PgConnection>::new(crate::env::DATABASE_URL.to_string());
     diesel::r2d2::Pool::builder()
         .max_size(5)
         .build(manager)

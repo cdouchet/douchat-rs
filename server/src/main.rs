@@ -1,17 +1,23 @@
+use crate::env::API_PORT;
 use accounts::{create_account, get_user_by_uid, get_user_by_username};
 use actix_web::{
     web::{get, Data},
     App, HttpServer,
 };
 use dotenvy::dotenv;
+use oauth::apple::apple_auth;
 use state::DouchatState;
-use utils::env::API_PORT;
 
 pub mod accounts;
 pub mod db;
+pub mod env;
 pub mod error;
+pub mod http;
+pub mod oauth;
 pub mod schema;
+pub mod security;
 pub mod state;
+pub mod utils;
 
 async fn index() -> String {
     format!(
@@ -30,6 +36,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .service(create_account)
             .service(get_user_by_uid)
             .service(get_user_by_username)
+            .service(apple_auth)
     });
 
     app.bind(("0.0.0.0", *API_PORT))

@@ -1,4 +1,3 @@
-workspace = { members = ["utils"] }
 [package]
 name = "server"
 version = "0.1.0"
@@ -12,8 +11,20 @@ http-serde = "2.0.0"
 lazy_static = "1.4.0"
 serde = { version = "1.0.197", features = ["derive"] }
 serde_json = "1.0.115"
-utils = { path = "utils" }
 uuid = { version = "1.8.0", features = ["v4", "serde", "fast-rng"] }
 actix-web = "4.5.1"
-diesel = { version = "2.1.5", features = ["postgres", "chrono", "uuid", "r2d2"] }
+diesel = { version = "2.1.5", features = [
+    "postgres",
+    "chrono",
+    "uuid",
+    "r2d2",
+] }
 chrono = { version = "0.4.37", features = ["serde"] }
+jsonwebtoken = { version = "9.3.0", features = ["use_pem"] }
+reqwest = { version = "0.12.3", features = [
+    "deflate",
+    "stream",
+    "gzip",
+    "json",
+] }
+futures = "0.3.30"

@@ -6,6 +6,7 @@ diesel::table! {
         uid -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
+        email -> Varchar,
         username -> Varchar,
         photo_url -> Nullable<Varchar>,
         verification_date -> Nullable<Timestamptz>,

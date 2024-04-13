@@ -1,0 +1,7 @@
+https://appleid.apple.com/auth/authorize?
+response_type=code%20id_token
+&response_mode=form_post
+&client_id=net.doggo-saloon.douchat.signin
+&redirect_uri=https://douchat-test.doggo-saloon.net/login/apple
+&scope=name%20email
+&state=some_state
