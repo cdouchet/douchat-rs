@@ -1,11 +1,19 @@
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
-use crate::env::{JWT_ISSUER, JWT_SECRET};
+use crate::{
+    db::models::user::NewUser,
+    env::{JWT_ISSUER, JWT_SECRET},
+    state::DouchatState,
+    utils::response_with_token,
+};
 use actix_web::{
     cookie::{time::OffsetDateTime, Cookie, CookieBuilder},
-    FromRequest,
+    get,
+    http::{header::ContentType, StatusCode},
+    web::Data,
+    FromRequest, HttpResponse, HttpResponseBuilder,
 };
-use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};
+use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Validation};
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -52,8 +60,8 @@ pub struct DouchatJWTClaims<T: DouchatTokenType> {
     iat: u64,
     exp: u64,
     iss: String,
-    uid: Uuid,
-    r#type: T,
+    pub uid: Uuid,
+    pub r#type: T,
 }
 
 impl<'a, T: DouchatTokenType + Deserialize<'static>> DouchatJWTClaims<T> {
@@ -67,6 +75,12 @@ impl<'a, T: DouchatTokenType + Deserialize<'static>> DouchatJWTClaims<T> {
             iss: JWT_ISSUER.to_string(),
             r#type,
         }
+    }
+
+    pub fn to_token(self) -> crate::error::Result<String> {
+        let header = jsonwebtoken::Header::default();
+        let key = EncodingKey::from_secret(JWT_SECRET.as_bytes());
+        encode(&header, &self, &key).map_err(from_jwt_error)
     }
 }
 
@@ -84,21 +98,24 @@ impl<T: DouchatTokenType + DeserializeOwned + 'static> TryFrom<Cookie<'static>>
 
     fn try_from(value: Cookie<'static>) -> Result<Self, Self::Error> {
         let decoding_key = DecodingKey::from_secret(JWT_SECRET.as_bytes());
-        let validation = Validation::new(Algorithm::RS256);
+        let validation = Validation::default();
         decode::<Self>(value.value(), &decoding_key, &validation)
             .map(|e| e.claims)
             .map_err(from_jwt_error)
     }
 }
 
-impl<T: DouchatTokenType + Deserialize<'static>> Into<Cookie<'static>> for DouchatJWTClaims<T> {
-    fn into(self) -> Cookie<'static> {
+impl<T: DouchatTokenType + Deserialize<'static>> TryInto<Cookie<'static>> for DouchatJWTClaims<T> {
+    type Error = DouchatError;
+
+    fn try_into(self) -> crate::error::Result<Cookie<'static>> {
         let expires = OffsetDateTime::now_utc() + Duration::from_secs(T::validity());
-        CookieBuilder::new(T::cookie_name(), serde_json::to_string(&self).unwrap())
+        Ok(CookieBuilder::new(T::cookie_name(), self.to_token()?)
+            .path("/")
             .secure(true)
             .http_only(true)
             .expires(expires)
-            .finish()
+            .finish())
     }
 }
 
@@ -115,4 +132,34 @@ impl<T: DouchatTokenType + DeserializeOwned + 'static> FromRequest for DouchatJW
             None => futures::future::err(DouchatError::unauthorized()),
         }
     }
+}
+
+pub fn create_test_user(state: DouchatState) -> crate::error::Result<()> {
+    if let None = state.db().get_user_by_username("Test")? {
+        let new_user = NewUser::test_user();
+        state.db().create_user(new_user)?;
+    }
+    Ok(())
+}
+
+// TO REMOVE !!!
+
+#[get("/test_user")]
+pub async fn test_user(state: Data<DouchatState>) -> crate::error::Result<HttpResponse> {
+    let user = state
+        .db()
+        .get_user_by_username("Test")?
+        .expect("Error: Test user was not created");
+    let claims = access_and_refresh(user.uid);
+    return Ok(response_with_token(user, claims)?);
+}
+
+#[get("/test_ws")]
+pub async fn test_ws() -> HttpResponse {
+    let cargo_manifest_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
+    let path = format!("{}/test_ws.html", cargo_manifest_dir);
+    let contents = std::fs::read_to_string(path).unwrap();
+    HttpResponseBuilder::new(StatusCode::OK)
+        .content_type(ContentType::html())
+        .body(contents)
 }

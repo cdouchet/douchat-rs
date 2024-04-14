@@ -5,3 +5,11 @@ response_type=code%20id_token
 &redirect_uri=https://douchat-test.doggo-saloon.net/login/apple
 &scope=name%20email
 &state=some_state
+
+https://accounts.google.com/o/oauth2/auth/oauthchooseaccount
+?response_type=code
+&client_id=542563237932-38e3ra1nlg6gkggkrdk3tp7kv38a977g.apps.googleusercontent.com
+&redirect_uri=https://douchat-test.doggo-saloon.net/login/google
+&scope=email%20profile%20openid
+&prompt=select_account
+&state=some_state

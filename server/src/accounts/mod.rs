@@ -26,6 +26,6 @@ pub async fn get_user_by_uid(state: Data<DouchatState>, uid: Path<String>) -> Re
 pub async fn get_user_by_username(
     state: Data<DouchatState>,
     username: Path<String>,
-) -> Result<Json<User>> {
+) -> Result<Json<Option<User>>> {
     Ok(Json(state.db().get_user_by_username(&username)?))
 }

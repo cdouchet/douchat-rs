@@ -1,11 +1,14 @@
 use crate::env::API_PORT;
 use accounts::{create_account, get_user_by_uid, get_user_by_username};
+use actix::Actor;
 use actix_web::{
     web::{get, Data},
     App, HttpServer,
 };
 use dotenvy::dotenv;
-use oauth::apple::apple_auth;
+use messenger::ws;
+use oauth::{apple::apple_auth, google::google_auth};
+use security::jwt::{create_test_user, test_user, test_ws};
 use state::DouchatState;
 
 pub mod accounts;
@@ -13,6 +16,7 @@ pub mod db;
 pub mod env;
 pub mod error;
 pub mod http;
+pub mod messenger;
 pub mod oauth;
 pub mod schema;
 pub mod security;
@@ -29,14 +33,23 @@ async fn index() -> String {
 #[actix_web::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
-    let app = HttpServer::new(|| {
+    let state = DouchatState::new();
+    create_test_user(state.clone()).expect("Error: could not create test user");
+    let state_addr = state.clone().start();
+    let app = HttpServer::new(move || {
         App::new()
-            .app_data(Data::new(DouchatState::new()))
+            .app_data(Data::new(state.clone()))
+            .app_data(Data::new(state_addr.clone()))
             .route("/", get().to(index))
             .service(create_account)
             .service(get_user_by_uid)
             .service(get_user_by_username)
             .service(apple_auth)
+            .service(google_auth)
+            // REMOVE ON PROD
+            .service(test_user)
+            .service(test_ws)
+            .service(ws)
     });
 
     app.bind(("0.0.0.0", *API_PORT))

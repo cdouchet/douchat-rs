@@ -7,7 +7,7 @@ diesel::table! {
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
         email -> Varchar,
-        username -> Varchar,
+        username -> Nullable<Varchar>,
         photo_url -> Nullable<Varchar>,
         verification_date -> Nullable<Timestamptz>,
         description -> Nullable<Varchar>,

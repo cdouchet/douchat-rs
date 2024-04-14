@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Test Douchat WS</title>
+    </head>
+    <body>
+        <input id="my-input" type="text" onkeydown="send(this)" />
+        <button id="my-button">SEND</button>
+        <script>
+            const input = document.getElementById("my-input");
+            const button = document.getElementById("my-button");
+
+            let ws = new WebSocket("wss://douchat-test.doggo-saloon.net/ws");
+
+            ws.onopen = (event) => {
+                console.log("Websocket opened !");
+            };
+
+            ws.onclose = (event) => {
+                ws = null;
+            };
+
+            ws.onerror = (event) => {
+                ws = null;
+            };
+
+            ws.onmessage = (event) => {
+                console.log("New message:");
+                console.log(event.data);
+            };
+
+            button.addEventListener("click", (event) => {
+                ws.send(input.value);
+            });
+
+            function send(event) {
+                if (event.key == "Enter") {
+                    ws.send(event.value);
+                }
+            }
+        </script>
+    </body>
+</html>

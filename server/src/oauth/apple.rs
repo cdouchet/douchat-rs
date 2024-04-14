@@ -130,13 +130,13 @@ pub async fn apple_auth(
         Some(user) => {
             let uid = user.uid;
             let claims = access_and_refresh(uid);
-            return Ok(response_with_token(user, claims));
+            return Ok(response_with_token(user, claims)?);
         }
         None => {
             let new_user = NewUser::from((payload, claims));
             let user = state.db().create_user(new_user)?;
             let claims = access_and_refresh(user.uid);
-            return Ok(response_with_token(user, claims));
+            return Ok(response_with_token(user, claims)?);
         }
     }
 }

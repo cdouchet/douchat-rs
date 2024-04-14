@@ -2,6 +2,7 @@ use actix_web::{
     http::{header::ContentType, StatusCode},
     HttpResponseBuilder, ResponseError,
 };
+use bytestring::ByteString;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
@@ -69,5 +70,12 @@ impl ResponseError for DouchatError {
         HttpResponseBuilder::new(self.status_code)
             .insert_header(ContentType::json())
             .body(serde_json::to_string(&self).unwrap())
+    }
+}
+
+impl From<DouchatError> for ByteString {
+    fn from(value: DouchatError) -> Self {
+        let converted = serde_json::to_string(&value).unwrap();
+        Self::from(converted)
     }
 }

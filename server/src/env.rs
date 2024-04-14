@@ -22,4 +22,6 @@ lazy_static! {
 #[cfg(feature = "google_auth")]
 lazy_static! {
     pub static ref GOOGLE_SECRET: GoogleSecret = GoogleSecret::load();
+    pub static ref GOOGLE_REDIRECT_URI: String = var("GOOGLE_REDIRECT_URI")
+        .expect("GOOGLE_REDIRECT_URI must be set if google_auth feature is enabled");
 }
