@@ -9,6 +9,8 @@ use uuid::Uuid;
 
 use crate::state::DouchatState;
 
+pub mod contact_routes;
+
 #[post("/accounts")]
 pub async fn create_account(
     state: Data<DouchatState>,
@@ -18,7 +20,10 @@ pub async fn create_account(
 }
 
 #[get("/accounts/id/{id}")]
-pub async fn get_user_by_uid(state: Data<DouchatState>, uid: Path<String>) -> Result<Json<User>> {
+pub async fn get_user_by_uid(
+    state: Data<DouchatState>,
+    uid: Path<String>,
+) -> Result<Json<Option<User>>> {
     Ok(Json(state.db().get_user_by_uid(Uuid::parse_str(&uid)?)?))
 }
 

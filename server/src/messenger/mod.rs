@@ -15,6 +15,7 @@ use self::{
 };
 
 pub mod actions;
+pub mod messenger_routes;
 pub mod parser;
 pub mod room;
 pub mod session;
@@ -84,7 +85,10 @@ pub async fn ws(
     state: actix_web::web::Data<DouchatState>,
     token: DouchatJWTClaims<Access>,
 ) -> crate::error::Result<HttpResponse> {
-    let user = state.db().get_user_by_uid(token.uid)?;
+    let user = state
+        .db()
+        .get_user_by_uid(token.uid)?
+        .ok_or(DouchatError::unauthorized())?;
     let (addr, resp) = actix_web_actors::ws::WsResponseBuilder::new(
         Session {
             user: user.clone(),

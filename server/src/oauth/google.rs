@@ -171,8 +171,7 @@ pub async fn google_auth(
     let user = state.db().email_exists(&identity.email)?;
     match user {
         Some(user) => {
-            let uid = user.uid;
-            let claims = access_and_refresh(uid);
+            let claims = access_and_refresh(user.uid, user.id);
             return Ok(response_with_token(user, claims)?);
         }
         None => {
@@ -182,7 +181,7 @@ pub async fn google_auth(
                 new_user.verification_date = None;
             }
             let user = state.db().create_user(new_user)?;
-            let claims = access_and_refresh(user.uid);
+            let claims = access_and_refresh(user.uid, user.id);
             return Ok(response_with_token(user, claims)?);
         }
     }

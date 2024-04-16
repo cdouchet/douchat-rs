@@ -2,11 +2,14 @@ use crate::env::API_PORT;
 use accounts::{create_account, get_user_by_uid, get_user_by_username};
 use actix::Actor;
 use actix_web::{
-    web::{get, Data},
+    web::{self, get, Data},
     App, HttpServer,
 };
 use dotenvy::dotenv;
-use messenger::ws;
+use messenger::{
+    messenger_routes::{get_user_contacts, get_user_rooms},
+    ws,
+};
 use oauth::{apple::apple_auth, google::google_auth};
 use security::jwt::{create_test_user, test_user, test_ws};
 use state::DouchatState;
@@ -50,6 +53,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .service(test_user)
             .service(test_ws)
             .service(ws)
+            .service(
+                web::scope("/messenger")
+                    .service(get_user_rooms)
+                    .service(get_user_contacts),
+            )
     });
 
     app.bind(("0.0.0.0", *API_PORT))

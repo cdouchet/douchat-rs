@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS rooms (
+    id SERIAL PRIMARY KEY,
+    uid uuid NOT NULL DEFAULT uuid_generate_v4(),
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    name VARCHAR NOT NULL,
+    description VARCHAR NOT NULL,
+    room_type VARCHAR NOT NULL
+);

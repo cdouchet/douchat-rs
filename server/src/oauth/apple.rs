@@ -128,14 +128,13 @@ pub async fn apple_auth(
     let claims = payload.get_claims().await?;
     match state.db().email_exists(&claims.email)? {
         Some(user) => {
-            let uid = user.uid;
-            let claims = access_and_refresh(uid);
+            let claims = access_and_refresh(user.uid, user.id);
             return Ok(response_with_token(user, claims)?);
         }
         None => {
             let new_user = NewUser::from((payload, claims));
             let user = state.db().create_user(new_user)?;
-            let claims = access_and_refresh(user.uid);
+            let claims = access_and_refresh(user.uid, user.id);
             return Ok(response_with_token(user, claims)?);
         }
     }

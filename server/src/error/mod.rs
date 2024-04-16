@@ -22,11 +22,11 @@ pub struct DouchatError {
 }
 
 impl DouchatError {
-    pub fn not_found() -> Self {
+    pub fn not_found(description: Option<String>) -> Self {
         Self {
             status_code: StatusCode::NOT_FOUND,
             error: String::from("Not Found"),
-            description: None,
+            description,
         }
     }
 

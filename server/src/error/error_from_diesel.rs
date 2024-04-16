@@ -4,7 +4,7 @@ use diesel::result::{DatabaseErrorKind, Error};
 impl From<Error> for DouchatError {
     fn from(value: diesel::result::Error) -> Self {
         match value {
-            Error::NotFound => Self::not_found(),
+            Error::NotFound => Self::not_found(Some(value.to_string())),
             Error::DatabaseError(kind, info) => match kind {
                 DatabaseErrorKind::UniqueViolation => {
                     Self::bad_request(info.details().map(|e| e.to_string()))
@@ -12,6 +12,9 @@ impl From<Error> for DouchatError {
                 DatabaseErrorKind::NotNullViolation => {
                     Self::bad_request(Some(String::from("Check null fields")))
                 }
+                DatabaseErrorKind::ForeignKeyViolation => Self::bad_request(Some(String::from(
+                    info.details().unwrap_or("ForeignKeyViolation"),
+                ))),
                 _ => Self::internal_server_error(),
             },
             _ => Self::internal_server_error(),

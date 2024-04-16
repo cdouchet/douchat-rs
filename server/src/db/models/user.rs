@@ -5,18 +5,19 @@ use crate::oauth::apple::{AppleIdTokenClaims, AppleOauthPayload, AppleUser};
 use crate::oauth::google::GoogleIdentityResponse;
 use crate::schema::users;
 use chrono::{DateTime, Utc};
+use diesel::associations::Identifiable;
 use diesel::{
     deserialize::Queryable, prelude::Insertable, ExpressionMethods, QueryDsl, RunQueryDsl,
 };
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-#[derive(Debug, Queryable, Serialize, Clone)]
+#[derive(Debug, Identifiable, Queryable, Serialize, Clone)]
 #[diesel(table_name = users)]
 #[allow(dead_code)]
 pub struct User {
     #[serde(skip_serializing)]
-    id: i32,
+    pub id: i32,
     pub uid: Uuid,
     created_at: DateTime<Utc>,
     updated_at: DateTime<Utc>,
@@ -86,6 +87,8 @@ impl From<GoogleIdentityResponse> for NewUser {
     }
 }
 
+use diesel::result::Error as DieselError;
+
 impl DouchatPool {
     pub fn create_user(&self, new_user: NewUser) -> Result<User> {
         let conn = &mut self.get_conn();
@@ -95,12 +98,18 @@ impl DouchatPool {
             .map_err(from_diesel_error)
     }
 
-    pub fn get_user_by_uid(&self, id: Uuid) -> Result<User> {
+    pub fn get_user_by_uid(&self, id: Uuid) -> Result<Option<User>> {
         let conn = &mut self.get_conn();
-        users::table
+        match users::table
             .filter(users::uid.eq(id))
             .get_result::<User>(conn)
-            .map_err(from_diesel_error)
+        {
+            Ok(e) => Ok(Some(e)),
+            Err(err) => match err {
+                DieselError::NotFound => Ok(None),
+                err => Err(DouchatError::from(err)),
+            },
+        }
     }
 
     pub fn get_user_by_id(&self, id: i32) -> Result<User> {
