@@ -55,6 +55,13 @@ use super::contact::NewContact;
 impl DouchatPool {
     pub fn create_contact_request(&self, request: NewContactRequest) -> Result<ContactRequest> {
         let conn = &mut self.get_conn();
+        let contact_request = contact_requests::table
+            .filter(
+                contact_requests::receiver
+                    .eq(request.receiver)
+                    .and(contact_requests::sender.eq(request.sender)),
+            )
+            .get_result::<ContactRequest>(conn)?;
         diesel::insert_into(contact_requests::table)
             .values(request)
             .get_result::<ContactRequest>(conn)

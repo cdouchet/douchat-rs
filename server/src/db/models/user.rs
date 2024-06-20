@@ -10,9 +10,10 @@ use diesel::{
     deserialize::Queryable, prelude::Insertable, ExpressionMethods, QueryDsl, RunQueryDsl,
 };
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 use uuid::Uuid;
 
-#[derive(Debug, Identifiable, Queryable, Serialize, Clone)]
+#[derive(Debug, Identifiable, Queryable, Serialize, Clone, ToSchema)]
 #[diesel(table_name = users)]
 #[allow(dead_code)]
 pub struct User {
@@ -61,12 +62,7 @@ impl From<(AppleOauthPayload, AppleIdTokenClaims)> for NewUser {
         Self {
             email: value.1.email,
             description: None,
-            username: Some(
-                serde_json::from_str::<AppleUser>(&value.0.user.unwrap())
-                    .unwrap()
-                    .name
-                    .join(),
-            ),
+            username: Some(value.0.user.unwrap().name.join()),
             photo_url: None,
             verification_date: Some(Utc::now()),
             status: None,

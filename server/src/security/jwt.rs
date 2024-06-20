@@ -139,6 +139,29 @@ impl<T: DouchatTokenType + DeserializeOwned + 'static> FromRequest for DouchatJW
     }
 }
 
+#[utoipa::path(
+    get,
+    path = "/token/refresh",
+    tag = "Login",
+    responses(
+        (status = 200, description = "Successfully refresh access token"),
+        (status = 401, description = "Unauthrorized", body = DouchatError),
+        (status = 500, description = "Internal Server Error", body = DouchatError)
+    )
+)]
+#[get("/token/refresh")]
+pub async fn refresh_access_token(
+    claims: DouchatJWTClaims<Refresh>,
+) -> crate::error::Result<HttpResponse> {
+    let claims = access_and_refresh(claims.uid, claims.id);
+    Ok(HttpResponseBuilder::new(StatusCode::OK)
+        .cookie(claims.0.try_into()?)
+        .cookie(claims.1.try_into()?)
+        .finish())
+}
+
+// TO REMOVE !!!
+
 pub fn create_test_user(state: DouchatState) -> crate::error::Result<()> {
     if let None = state.db().get_user_by_username("Test")? {
         let new_user = NewUser::test_user();
@@ -146,8 +169,6 @@ pub fn create_test_user(state: DouchatState) -> crate::error::Result<()> {
     }
     Ok(())
 }
-
-// TO REMOVE !!!
 
 #[get("/test_user")]
 pub async fn test_user(state: Data<DouchatState>) -> crate::error::Result<HttpResponse> {

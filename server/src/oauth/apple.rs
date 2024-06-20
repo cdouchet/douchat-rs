@@ -1,11 +1,16 @@
-use crate::{env::APPLE_CLIENT_ID, security::jwt::access_and_refresh, utils::response_with_token};
+use crate::{
+    env::{APPLE_CLIENT_ID, APPLE_SIGN_IN_ID},
+    security::jwt::access_and_refresh,
+    utils::response_with_token,
+};
 use actix_web::{
     post,
-    web::{Data, Form},
+    web::{Data, Form, Json},
     HttpResponse,
 };
 use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 
 use crate::{
     db::models::user::NewUser,
@@ -14,12 +19,12 @@ use crate::{
     state::DouchatState,
 };
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, ToSchema)]
 pub struct AppleOauthPayload {
     pub code: String,
     pub state: Option<String>,
     pub id_token: String,
-    pub user: Option<String>,
+    pub user: Option<AppleUser>,
 }
 
 #[allow(unused)]
@@ -47,7 +52,7 @@ pub struct AppleTokenPayload {
     pub id_token: String,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, ToSchema)]
 #[allow(non_snake_case)]
 pub struct AppleName {
     pub firstName: String,
@@ -60,7 +65,7 @@ impl AppleName {
     }
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, ToSchema)]
 pub struct AppleUser {
     pub name: AppleName,
     pub email: String,
@@ -110,7 +115,7 @@ impl AppleOauthPayload {
         let decoding_key = DecodingKey::from_rsa_components(&apple_key.n, &apple_key.e)
             .expect("Could not find a suitable apple key to decode the id_token");
         let mut validation = Validation::new(Algorithm::RS256);
-        validation.set_audience(&[&APPLE_CLIENT_ID.to_string()]);
+        validation.set_audience(&[&APPLE_CLIENT_ID.to_string(), &APPLE_SIGN_IN_ID.to_string()]);
         let decoded = decode::<AppleIdTokenClaims>(&self.id_token, &decoding_key, &validation);
         if let Err(err) = decoded {
             println!("Err decoding apple user. Err: {err}");
@@ -120,10 +125,19 @@ impl AppleOauthPayload {
     }
 }
 
+#[utoipa::path(
+    post,
+    tag = "OAuth",
+    path = "/login/apple",
+    request_body(content = AppleOauthPayload, content_type = "application/json"),
+    responses(
+        (status = 200, description = "Successfull authentication", body = User)
+    )
+)]
 #[post("/login/apple")]
 pub async fn apple_auth(
     state: Data<DouchatState>,
-    Form(payload): Form<AppleOauthPayload>,
+    Json(payload): Json<AppleOauthPayload>,
 ) -> Result<HttpResponse> {
     let claims = payload.get_claims().await?;
     match state.db().email_exists(&claims.email)? {

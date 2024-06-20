@@ -2,23 +2,29 @@ use crate::env::API_PORT;
 use accounts::{create_account, get_user_by_uid, get_user_by_username};
 use actix::Actor;
 use actix_web::{
+    middleware::Logger,
     web::{self, get, Data},
     App, HttpServer,
 };
+use documentation::ApiDoc;
 use dotenvy::dotenv;
+use media::get_login_background;
 use messenger::{
     messenger_routes::{get_user_contacts, get_user_rooms},
     ws,
 };
 use oauth::{apple::apple_auth, google::google_auth};
-use security::jwt::{create_test_user, test_user, test_ws};
+use security::jwt::{create_test_user, refresh_access_token, test_user, test_ws};
 use state::DouchatState;
+use utoipa_swagger_ui::SwaggerUi;
 
 pub mod accounts;
 pub mod db;
+pub mod documentation;
 pub mod env;
 pub mod error;
 pub mod http;
+pub mod media;
 pub mod messenger;
 pub mod oauth;
 pub mod schema;
@@ -41,9 +47,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let state_addr = state.clone().start();
     let app = HttpServer::new(move || {
         App::new()
+            .wrap(Logger::default())
             .app_data(Data::new(state.clone()))
             .app_data(Data::new(state_addr.clone()))
             .route("/", get().to(index))
+            .service(get_login_background)
             .service(create_account)
             .service(get_user_by_uid)
             .service(get_user_by_username)
@@ -53,11 +61,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .service(test_user)
             .service(test_ws)
             .service(ws)
+            .service(web::scope("/security").service(refresh_access_token))
             .service(
                 web::scope("/messenger")
                     .service(get_user_rooms)
                     .service(get_user_contacts),
             )
+            .service(SwaggerUi::new("/docs/{_:.*}").url("/api-docs/openapi.json", ApiDoc::create()))
     });
 
     app.bind(("0.0.0.0", *API_PORT))

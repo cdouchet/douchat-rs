@@ -5,6 +5,7 @@ use actix_web::{
 use bytestring::ByteString;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
+use utoipa::ToSchema;
 
 pub mod error_from_diesel;
 pub mod error_from_jwt;
@@ -12,7 +13,7 @@ pub mod error_from_uuid;
 
 pub type Result<T> = std::result::Result<T, DouchatError>;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct DouchatError {
     #[serde(skip_serializing)]
     #[serde(skip_deserializing)]
