@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/providers/login_provider.dart';
 import 'package:app/providers/user_provider.dart';
 import 'package:app/router.dart';
 import 'package:app/utils/clair_snackbar.dart';
@@ -10,13 +11,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 enum LoginButtonType {
-  mail,
+  google,
   apple;
 
   String pngPath() {
     switch (this) {
-      case LoginButtonType.mail:
-        return "assets/logos/mail.svg";
+      case LoginButtonType.google:
+        return "assets/logos/google.svg";
       case LoginButtonType.apple:
         return "assets/logos/apple.svg";
     }
@@ -33,31 +34,24 @@ class LoginButton extends StatefulWidget {
 
 class _LoginButtonState extends State<LoginButton> {
   bool isLoading = false;
+  Map<LoginButtonType, bool> loadingButtonStates =
+      LoginButtonType.values.asMap().map((_, e) => MapEntry(e, false));
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
         switch (widget.loginButtonType) {
-          case LoginButtonType.mail:
+          case LoginButtonType.google:
+            setState(() => loadingButtonStates[LoginButtonType.google] = true);
+            Provider.of<LoginProvider>(context, listen: false).signInWithGoogle(context);
+            setState(() => loadingButtonStates[LoginButtonType.google] = true);
             return;
           case LoginButtonType.apple:
-            setState(() => isLoading = true);
-            Provider.of<UserProvider>(context, listen: false)
-                .loginWithApple()
-                .then((res) {
-              setState(() => isLoading = false);
-              if (res.isFailure) {
-                showCustomSnackbar(context: context, text: res.failure);
-                return;
-              }
-              DouchatRouter.instance.push(context, routeName: Home.routeName, pushAndRemove: true);
-              // Navigator.pushNamedAndRemoveUntil(
-              //   context,
-              //   Home.routeName,
-              //   (route) => false,
-              // );
-            });
+            setState(() => loadingButtonStates[LoginButtonType.apple] = true);
+            Provider.of<LoginProvider>(context, listen: false)
+                .signInWithApple(context);
+            setState(() => loadingButtonStates[LoginButtonType.apple] = false);
         }
       },
       child: Padding(

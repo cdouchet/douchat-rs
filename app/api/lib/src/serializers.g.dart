@@ -11,6 +11,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(AppleOauthPayload.serializer)
       ..add(AppleUser.serializer)
       ..add(DouchatError.serializer)
+      ..add(GoogleOAuthPayload.serializer)
       ..add(User.serializer))
     .build();
 

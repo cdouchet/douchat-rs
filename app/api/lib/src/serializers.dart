@@ -18,6 +18,7 @@ import 'package:api/src/model/apple_name.dart';
 import 'package:api/src/model/apple_oauth_payload.dart';
 import 'package:api/src/model/apple_user.dart';
 import 'package:api/src/model/douchat_error.dart';
+import 'package:api/src/model/google_o_auth_payload.dart';
 import 'package:api/src/model/user.dart';
 
 part 'serializers.g.dart';
@@ -27,6 +28,7 @@ part 'serializers.g.dart';
   AppleOauthPayload,
   AppleUser,
   DouchatError,
+  GoogleOAuthPayload,
   User,
 ])
 Serializers serializers = (_$serializers.toBuilder()

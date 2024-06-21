@@ -7,7 +7,10 @@ void showCustomSnackbar({
 }) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Text(text),
+      content: Align(
+        alignment: Alignment.topCenter,
+        child: Text(text),
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
         side: BorderSide.none,

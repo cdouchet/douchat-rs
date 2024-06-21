@@ -46,25 +46,25 @@ Please follow the [installation procedure](#installation--usage) and then run th
 import 'package:api/api.dart';
 
 
-final api = Api().getOAuthApi();
-final AppleOauthPayload appleOauthPayload = ; // AppleOauthPayload | 
+final api = Api().getLoginApi();
 
 try {
-    final response = await api.appleAuth(appleOauthPayload);
-    print(response);
+    api.refreshAccessToken();
 } catch on DioException (e) {
-    print("Exception when calling OAuthApi->appleAuth: $e\n");
+    print("Exception when calling LoginApi->refreshAccessToken: $e\n");
 }
 
 ```
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://douchat-test.doggo-saloon.net*
+All URIs are relative to *http://localhost:3000*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+[*LoginApi*](doc/LoginApi.md) | [**refreshAccessToken**](doc/LoginApi.md#refreshaccesstoken) | **GET** /token/refresh | 
 [*OAuthApi*](doc/OAuthApi.md) | [**appleAuth**](doc/OAuthApi.md#appleauth) | **POST** /login/apple | 
+[*OAuthApi*](doc/OAuthApi.md) | [**googleAuth**](doc/OAuthApi.md#googleauth) | **GET** /login/google | 
 
 
 ## Documentation For Models
@@ -73,6 +73,7 @@ Class | Method | HTTP request | Description
  - [AppleOauthPayload](doc/AppleOauthPayload.md)
  - [AppleUser](doc/AppleUser.md)
  - [DouchatError](doc/DouchatError.md)
+ - [GoogleOAuthPayload](doc/GoogleOAuthPayload.md)
  - [User](doc/User.md)
 
 

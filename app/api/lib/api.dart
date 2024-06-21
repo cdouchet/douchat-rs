@@ -9,10 +9,12 @@ export 'package:api/src/auth/oauth.dart';
 export 'package:api/src/serializers.dart';
 export 'package:api/src/model/date.dart';
 
+export 'package:api/src/api/login_api.dart';
 export 'package:api/src/api/o_auth_api.dart';
 
 export 'package:api/src/model/apple_name.dart';
 export 'package:api/src/model/apple_oauth_payload.dart';
 export 'package:api/src/model/apple_user.dart';
 export 'package:api/src/model/douchat_error.dart';
+export 'package:api/src/model/google_o_auth_payload.dart';
 export 'package:api/src/model/user.dart';

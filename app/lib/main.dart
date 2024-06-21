@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/providers/login_provider.dart';
 import 'package:app/providers/user_provider.dart';
 import 'package:app/router.dart';
 import 'package:app/themes/light.dart';
@@ -30,6 +31,7 @@ class Douchat extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => LoginProvider()),
       ],
       child: MaterialApp(
         theme: lightThemeData,

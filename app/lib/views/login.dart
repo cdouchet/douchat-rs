@@ -92,7 +92,8 @@ class _LoginViewState extends State<LoginView> {
                           children: [
                             Expanded(
                               child: LoginButton(
-                                  loginButtonType: LoginButtonType.mail),
+                                loginButtonType: LoginButtonType.google,
+                              ),
                             ),
                             SizedBox(width: 20),
                             Expanded(

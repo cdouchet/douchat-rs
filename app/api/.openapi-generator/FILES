@@ -5,10 +5,13 @@ doc/AppleName.md
 doc/AppleOauthPayload.md
 doc/AppleUser.md
 doc/DouchatError.md
+doc/GoogleOAuthPayload.md
+doc/LoginApi.md
 doc/OAuthApi.md
 doc/User.md
 lib/api.dart
 lib/src/api.dart
+lib/src/api/login_api.dart
 lib/src/api/o_auth_api.dart
 lib/src/api_util.dart
 lib/src/auth/api_key_auth.dart
@@ -22,6 +25,8 @@ lib/src/model/apple_oauth_payload.dart
 lib/src/model/apple_user.dart
 lib/src/model/date.dart
 lib/src/model/douchat_error.dart
+lib/src/model/google_o_auth_payload.dart
 lib/src/model/user.dart
 lib/src/serializers.dart
 pubspec.yaml
+test/google_o_auth_payload_test.dart
