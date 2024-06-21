@@ -21,8 +21,8 @@ use crate::{
 
 #[derive(Debug, Deserialize, ToSchema)]
 pub struct AppleOauthPayload {
-    pub code: String,
-    pub state: Option<String>,
+    // pub code: String,
+    // pub state: Option<String>,
     pub id_token: String,
     pub user: Option<AppleUser>,
 }
@@ -68,7 +68,6 @@ impl AppleName {
 #[derive(Debug, Clone, Deserialize, ToSchema)]
 pub struct AppleUser {
     pub name: AppleName,
-    pub email: String,
 }
 
 #[derive(Deserialize, Serialize)]
