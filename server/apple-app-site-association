@@ -5,8 +5,7 @@
         {
             "appID": "9XGJZ44QS5.net.doggo-saloon.douchat",
             "paths": [
-                "/login/apple",
-                "/login/google"
+                "*"
             ]
         }
       ]
