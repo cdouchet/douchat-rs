@@ -1,15 +1,11 @@
-use std::{io::Read, iter::once, str::FromStr};
-
 use actix_files::NamedFile;
-use actix_web::{
-    get,
-    http::header::{HeaderName, HeaderValue},
-    HttpRequest, HttpResponse,
-};
-use async_stream::try_stream;
+use actix_web::{get, HttpRequest};
+
 use rand::{thread_rng, Rng};
 
-use crate::{error::Result, utils::rust_vars::CARGO_MANIFEST_DIR};
+use crate::error::Result;
+
+use crate::utils::rust_vars::CARGO_MANIFEST_DIR;
 
 #[get("/login/background")]
 pub async fn get_login_background(req: HttpRequest) -> Result<NamedFile> {

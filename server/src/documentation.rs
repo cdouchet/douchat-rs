@@ -1,15 +1,11 @@
-use utoipa::{
-    openapi::{
-        self,
-        security::{ApiKey, ApiKeyValue, SecurityScheme},
-        ServerBuilder,
-    },
-    OpenApi,
-};
+use utoipa::{openapi::ServerBuilder, OpenApi};
 
 use crate::db::models::user::User;
 use crate::error::DouchatError;
-use crate::oauth::apple::{AppleName, AppleOauthPayload, AppleUser, __path_apple_auth};
+use crate::oauth::{
+    apple::{AppleName, AppleOauthPayload, AppleUser, __path_apple_auth},
+    google::{GoogleOAuthPayload, __path_google_auth},
+};
 use crate::security::jwt::__path_refresh_access_token;
 
 use crate::env::API_BASE_URL;
@@ -29,11 +25,13 @@ use crate::env::API_BASE_URL;
             AppleOauthPayload,
             AppleUser,
             AppleName,
+            GoogleOAuthPayload,
             DouchatError
         )
     ),
     paths(
         apple_auth,
+        google_auth,
         refresh_access_token,
     )
 )]

@@ -4,18 +4,15 @@ pub mod room_user;
 use chrono::{DateTime, Utc};
 use diesel::associations::Identifiable;
 use diesel::{deserialize::Queryable, prelude::Insertable};
-use diesel::{
-    BelongingToDsl, BoolExpressionMethods, ExpressionMethods, QueryDsl, RunQueryDsl, Selectable,
-};
+use diesel::{BelongingToDsl, BoolExpressionMethods, ExpressionMethods, QueryDsl, RunQueryDsl};
 use serde::Serialize;
 use uuid::Uuid;
 
 use self::room_type::RoomType;
 use self::room_user::RoomUser;
 
-use crate::db::models::user::User;
 use crate::error::error_from_diesel::from_diesel_error;
-use crate::schema::{room_users, users};
+use crate::schema::room_users;
 use crate::{db::DouchatPool, schema::rooms};
 
 #[derive(Debug, Serialize, Queryable, Identifiable)]

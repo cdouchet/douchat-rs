@@ -1,7 +1,7 @@
 use crate::db::DouchatPool;
 use crate::error::DouchatError;
 use crate::error::{error_from_diesel::from_diesel_error, Result};
-use crate::oauth::apple::{AppleIdTokenClaims, AppleOauthPayload, AppleUser};
+use crate::oauth::apple::{AppleIdTokenClaims, AppleOauthPayload};
 use crate::oauth::google::GoogleIdentityResponse;
 use crate::schema::users;
 use chrono::{DateTime, Utc};

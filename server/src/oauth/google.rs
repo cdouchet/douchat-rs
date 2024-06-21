@@ -1,6 +1,7 @@
 use actix_web::web::{Data, Query};
 use actix_web::{get, HttpResponse};
 use serde::{Deserialize, Serialize};
+use utoipa::{IntoParams, ToSchema};
 
 use crate::db::models::user::NewUser;
 use crate::env::{GOOGLE_REDIRECT_URI, GOOGLE_SECRET};
@@ -41,9 +42,9 @@ impl GoogleSecret {
     }
 }
 
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Deserialize, Clone, Debug, ToSchema, IntoParams)]
 #[allow(dead_code)]
-struct GoogleOAuthPayload {
+pub struct GoogleOAuthPayload {
     code: String,
     scope: String,
     authuser: String,
@@ -160,6 +161,16 @@ struct GoogleTokenResponse {
     error_description: String,
 }
 
+#[utoipa::path(
+    get,
+    tag = "OAuth",
+    path = "/login/google",
+    params(GoogleOAuthPayload),
+    responses(
+        (status = 200, description = "Successfully authenticated with google oauth flow", body = User),
+        (status = 500, description = "Internal Server Error", body = DouchatError),
+    )
+)]
 #[get("/login/google")]
 pub async fn google_auth(
     params: Query<GoogleOAuthPayload>,

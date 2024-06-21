@@ -4,6 +4,8 @@ use actix_web::{
 };
 use serde::Serialize;
 
+pub mod rust_vars;
+
 use crate::error::Result;
 use crate::security::jwt::{Access, DouchatJWTClaims, Refresh};
 
