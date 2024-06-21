@@ -4,7 +4,7 @@ use crate::utils::rust_vars::CARGO_MANIFEST_DIR;
 
 #[get("/apple-app-site-association")]
 pub async fn apple_app_site_association() -> String {
-    let path = format!("{}/apple_app_site_association", CARGO_MANIFEST_DIR.as_str());
+    let path = format!("{}/apple-app-site-association", CARGO_MANIFEST_DIR.as_str());
     std::fs::read_to_string(path).unwrap()
 }
 
