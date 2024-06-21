@@ -23,6 +23,14 @@ pub struct DouchatError {
 }
 
 impl DouchatError {
+    pub fn not_implemented() -> Self {
+        Self {
+            status_code: StatusCode::INTERNAL_SERVER_ERROR,
+            error: String::from("Not Implemented"),
+            description: None,
+        }
+    }
+
     pub fn not_found(description: Option<String>) -> Self {
         Self {
             status_code: StatusCode::NOT_FOUND,

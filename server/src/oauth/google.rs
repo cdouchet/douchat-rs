@@ -115,10 +115,19 @@ impl GoogleTokenPayload {
             ))
             .send()
             .await
-            .map_err(|_| DouchatError::internal_server_error())?
+            .map_err(|e| {
+                eprintln!("Error getting google api identity response: {:?}", e);
+                DouchatError::internal_server_error()
+            })?
             .json::<GoogleIdentityResponse>()
             .await
-            .map_err(|_| DouchatError::internal_server_error())
+            .map_err(|e| {
+                eprintln!(
+                    "Error mapping google identity response to GoogleIdentityResponse struct: {:?}",
+                    e
+                );
+                DouchatError::internal_server_error()
+            })
     }
 }
 
@@ -157,7 +166,7 @@ pub struct GoogleIdentityResponse {
     pub given_name: String,
     pub family_name: String,
     pub picture: String,
-    pub locale: String,
+    // pub locale: String,
 }
 
 #[derive(Debug, Deserialize)]
