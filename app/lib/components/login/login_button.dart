@@ -68,7 +68,7 @@ class _LoginButtonState extends State<LoginButton> {
                   : const CircularProgressIndicator.adaptive()
               : SvgPicture.asset(
                   widget.loginButtonType.pngPath(),
-                  color: Colors.black,
+                  // color: Colors.black,
                   height: 30,
                 ),
         ),

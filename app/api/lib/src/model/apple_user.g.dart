@@ -8,15 +8,12 @@ part of 'apple_user.dart';
 
 class _$AppleUser extends AppleUser {
   @override
-  final String email;
-  @override
   final AppleName name;
 
   factory _$AppleUser([void Function(AppleUserBuilder)? updates]) =>
       (new AppleUserBuilder()..update(updates))._build();
 
-  _$AppleUser._({required this.email, required this.name}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(email, r'AppleUser', 'email');
+  _$AppleUser._({required this.name}) : super._() {
     BuiltValueNullFieldError.checkNotNull(name, r'AppleUser', 'name');
   }
 
@@ -30,13 +27,12 @@ class _$AppleUser extends AppleUser {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is AppleUser && email == other.email && name == other.name;
+    return other is AppleUser && name == other.name;
   }
 
   @override
   int get hashCode {
     var _$hash = 0;
-    _$hash = $jc(_$hash, email.hashCode);
     _$hash = $jc(_$hash, name.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
@@ -44,19 +40,13 @@ class _$AppleUser extends AppleUser {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'AppleUser')
-          ..add('email', email)
-          ..add('name', name))
+    return (newBuiltValueToStringHelper(r'AppleUser')..add('name', name))
         .toString();
   }
 }
 
 class AppleUserBuilder implements Builder<AppleUser, AppleUserBuilder> {
   _$AppleUser? _$v;
-
-  String? _email;
-  String? get email => _$this._email;
-  set email(String? email) => _$this._email = email;
 
   AppleNameBuilder? _name;
   AppleNameBuilder get name => _$this._name ??= new AppleNameBuilder();
@@ -69,7 +59,6 @@ class AppleUserBuilder implements Builder<AppleUser, AppleUserBuilder> {
   AppleUserBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
-      _email = $v.email;
       _name = $v.name.toBuilder();
       _$v = null;
     }
@@ -93,11 +82,7 @@ class AppleUserBuilder implements Builder<AppleUser, AppleUserBuilder> {
   _$AppleUser _build() {
     _$AppleUser _$result;
     try {
-      _$result = _$v ??
-          new _$AppleUser._(
-              email: BuiltValueNullFieldError.checkNotNull(
-                  email, r'AppleUser', 'email'),
-              name: name.build());
+      _$result = _$v ?? new _$AppleUser._(name: name.build());
     } catch (_) {
       late String _$failedField;
       try {

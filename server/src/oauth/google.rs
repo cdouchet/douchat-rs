@@ -82,10 +82,16 @@ impl GooglePostPayload {
             .header("Connection", "keep-alive")
             .send()
             .await
-            .map_err(|_| DouchatError::internal_server_error())?
+            .map_err(|e| {
+                eprintln!("Error authenticating user to google api: {:?}", e);
+                DouchatError::internal_server_error()
+            })?
             .json::<GoogleTokenPayload>()
             .await
-            .map_err(|_| DouchatError::internal_server_error())
+            .map_err(|e| {
+                eprintln!("Error mapping google response to json: {:?}", e);
+                DouchatError::internal_server_error()
+            })
     }
 }
 

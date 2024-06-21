@@ -1,4 +1,4 @@
-// Openapi Generator last run: : 2024-06-21T12:01:27.304977
+// Openapi Generator last run: : 2024-06-21T14:07:15.978390
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:openapi_generator_annotations/openapi_generator_annotations.dart';
 import 'package:api/api.dart' as generatedApi;

@@ -29,4 +29,3 @@ lib/src/model/google_o_auth_payload.dart
 lib/src/model/user.dart
 lib/src/serializers.dart
 pubspec.yaml
-test/google_o_auth_payload_test.dart

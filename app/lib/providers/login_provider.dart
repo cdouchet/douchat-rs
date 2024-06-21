@@ -21,17 +21,16 @@ class LoginProvider extends ChangeNotifier {
       ],
     ).then((credentials) {
       print("CREDENTIALS: $credentials");
-      AppleUserBuilder userBuilder = AppleUserBuilder();
-      userBuilder.email = credentials.email;
-      AppleNameBuilder nameBuilder = AppleNameBuilder();
-      nameBuilder.firstName = credentials.givenName;
-      nameBuilder.lastName = credentials.familyName;
-      userBuilder.name = nameBuilder;
       AppleOauthPayloadBuilder payload = AppleOauthPayloadBuilder();
-      payload.code = credentials.authorizationCode;
       payload.idToken = credentials.identityToken!;
-      payload.state = credentials.state ?? "state";
-      payload.user = userBuilder;
+      if (credentials.givenName != null) {
+        AppleUserBuilder userBuilder = AppleUserBuilder();
+        AppleNameBuilder nameBuilder = AppleNameBuilder();
+        nameBuilder.firstName = credentials.givenName;
+        nameBuilder.lastName = credentials.familyName;
+        userBuilder.name = nameBuilder;
+        payload.user = userBuilder;
+      }
       api
           .getOAuthApi()
           .appleAuth(

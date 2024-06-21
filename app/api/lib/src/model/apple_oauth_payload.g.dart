@@ -8,11 +8,7 @@ part of 'apple_oauth_payload.dart';
 
 class _$AppleOauthPayload extends AppleOauthPayload {
   @override
-  final String code;
-  @override
   final String idToken;
-  @override
-  final String? state;
   @override
   final AppleUser? user;
 
@@ -20,10 +16,7 @@ class _$AppleOauthPayload extends AppleOauthPayload {
           [void Function(AppleOauthPayloadBuilder)? updates]) =>
       (new AppleOauthPayloadBuilder()..update(updates))._build();
 
-  _$AppleOauthPayload._(
-      {required this.code, required this.idToken, this.state, this.user})
-      : super._() {
-    BuiltValueNullFieldError.checkNotNull(code, r'AppleOauthPayload', 'code');
+  _$AppleOauthPayload._({required this.idToken, this.user}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
         idToken, r'AppleOauthPayload', 'idToken');
   }
@@ -40,18 +33,14 @@ class _$AppleOauthPayload extends AppleOauthPayload {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is AppleOauthPayload &&
-        code == other.code &&
         idToken == other.idToken &&
-        state == other.state &&
         user == other.user;
   }
 
   @override
   int get hashCode {
     var _$hash = 0;
-    _$hash = $jc(_$hash, code.hashCode);
     _$hash = $jc(_$hash, idToken.hashCode);
-    _$hash = $jc(_$hash, state.hashCode);
     _$hash = $jc(_$hash, user.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
@@ -60,9 +49,7 @@ class _$AppleOauthPayload extends AppleOauthPayload {
   @override
   String toString() {
     return (newBuiltValueToStringHelper(r'AppleOauthPayload')
-          ..add('code', code)
           ..add('idToken', idToken)
-          ..add('state', state)
           ..add('user', user))
         .toString();
   }
@@ -72,17 +59,9 @@ class AppleOauthPayloadBuilder
     implements Builder<AppleOauthPayload, AppleOauthPayloadBuilder> {
   _$AppleOauthPayload? _$v;
 
-  String? _code;
-  String? get code => _$this._code;
-  set code(String? code) => _$this._code = code;
-
   String? _idToken;
   String? get idToken => _$this._idToken;
   set idToken(String? idToken) => _$this._idToken = idToken;
-
-  String? _state;
-  String? get state => _$this._state;
-  set state(String? state) => _$this._state = state;
 
   AppleUserBuilder? _user;
   AppleUserBuilder get user => _$this._user ??= new AppleUserBuilder();
@@ -95,9 +74,7 @@ class AppleOauthPayloadBuilder
   AppleOauthPayloadBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
-      _code = $v.code;
       _idToken = $v.idToken;
-      _state = $v.state;
       _user = $v.user?.toBuilder();
       _$v = null;
     }
@@ -123,11 +100,8 @@ class AppleOauthPayloadBuilder
     try {
       _$result = _$v ??
           new _$AppleOauthPayload._(
-              code: BuiltValueNullFieldError.checkNotNull(
-                  code, r'AppleOauthPayload', 'code'),
               idToken: BuiltValueNullFieldError.checkNotNull(
                   idToken, r'AppleOauthPayload', 'idToken'),
-              state: state,
               user: _user?.build());
     } catch (_) {
       late String _$failedField;

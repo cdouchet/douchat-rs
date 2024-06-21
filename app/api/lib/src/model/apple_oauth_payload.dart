@@ -12,21 +12,13 @@ part 'apple_oauth_payload.g.dart';
 /// AppleOauthPayload
 ///
 /// Properties:
-/// * [code]
 /// * [idToken]
-/// * [state]
 /// * [user]
 @BuiltValue()
 abstract class AppleOauthPayload
     implements Built<AppleOauthPayload, AppleOauthPayloadBuilder> {
-  @BuiltValueField(wireName: r'code')
-  String get code;
-
   @BuiltValueField(wireName: r'id_token')
   String get idToken;
-
-  @BuiltValueField(wireName: r'state')
-  String? get state;
 
   @BuiltValueField(wireName: r'user')
   AppleUser? get user;
@@ -57,23 +49,11 @@ class _$AppleOauthPayloadSerializer
     AppleOauthPayload object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
-    yield r'code';
-    yield serializers.serialize(
-      object.code,
-      specifiedType: const FullType(String),
-    );
     yield r'id_token';
     yield serializers.serialize(
       object.idToken,
       specifiedType: const FullType(String),
     );
-    if (object.state != null) {
-      yield r'state';
-      yield serializers.serialize(
-        object.state,
-        specifiedType: const FullType.nullable(String),
-      );
-    }
     if (object.user != null) {
       yield r'user';
       yield serializers.serialize(
@@ -106,27 +86,12 @@ class _$AppleOauthPayloadSerializer
       final key = serializedList[i] as String;
       final value = serializedList[i + 1];
       switch (key) {
-        case r'code':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
-          result.code = valueDes;
-          break;
         case r'id_token':
           final valueDes = serializers.deserialize(
             value,
             specifiedType: const FullType(String),
           ) as String;
           result.idToken = valueDes;
-          break;
-        case r'state':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType.nullable(String),
-          ) as String?;
-          if (valueDes == null) continue;
-          result.state = valueDes;
           break;
         case r'user':
           final valueDes = serializers.deserialize(

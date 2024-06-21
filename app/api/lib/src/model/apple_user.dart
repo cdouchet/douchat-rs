@@ -12,13 +12,9 @@ part 'apple_user.g.dart';
 /// AppleUser
 ///
 /// Properties:
-/// * [email]
 /// * [name]
 @BuiltValue()
 abstract class AppleUser implements Built<AppleUser, AppleUserBuilder> {
-  @BuiltValueField(wireName: r'email')
-  String get email;
-
   @BuiltValueField(wireName: r'name')
   AppleName get name;
 
@@ -45,11 +41,6 @@ class _$AppleUserSerializer implements PrimitiveSerializer<AppleUser> {
     AppleUser object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
-    yield r'email';
-    yield serializers.serialize(
-      object.email,
-      specifiedType: const FullType(String),
-    );
     yield r'name';
     yield serializers.serialize(
       object.name,
@@ -80,13 +71,6 @@ class _$AppleUserSerializer implements PrimitiveSerializer<AppleUser> {
       final key = serializedList[i] as String;
       final value = serializedList[i + 1];
       switch (key) {
-        case r'email':
-          final valueDes = serializers.deserialize(
-            value,
-            specifiedType: const FullType(String),
-          ) as String;
-          result.email = valueDes;
-          break;
         case r'name':
           final valueDes = serializers.deserialize(
             value,
