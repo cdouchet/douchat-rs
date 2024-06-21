@@ -22,6 +22,16 @@ diesel::table! {
 }
 
 diesel::table! {
+    message_readings (id) {
+        id -> Int8,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        message_id -> Int8,
+        reader -> Int4,
+    }
+}
+
+diesel::table! {
     messages (id) {
         id -> Int8,
         uid -> Uuid,
@@ -72,6 +82,8 @@ diesel::table! {
 }
 
 diesel::joinable!(contacts -> contact_requests (request_id));
+diesel::joinable!(message_readings -> messages (message_id));
+diesel::joinable!(message_readings -> users (reader));
 diesel::joinable!(messages -> rooms (room));
 diesel::joinable!(messages -> users (sender));
 diesel::joinable!(room_users -> rooms (room));
@@ -80,6 +92,7 @@ diesel::joinable!(room_users -> users (user_id));
 diesel::allow_tables_to_appear_in_same_query!(
     contact_requests,
     contacts,
+    message_readings,
     messages,
     room_users,
     rooms,
