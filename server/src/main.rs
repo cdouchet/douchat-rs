@@ -1,5 +1,9 @@
 use crate::env::API_PORT;
-use accounts::{create_account, get_user_by_uid, get_user_by_username};
+use accounts::{
+    create_account,
+    deep_link::{apple_app_site_association, asset_links_json},
+    get_user_by_uid, get_user_by_username,
+};
 use actix::Actor;
 use actix_web::{
     middleware::Logger,
@@ -67,6 +71,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     .service(get_user_rooms)
                     .service(get_user_contacts),
             )
+            // Deep link
+            .service(apple_app_site_association)
+            .service(asset_links_json)
             .service(SwaggerUi::new("/docs/{_:.*}").url("/api-docs/openapi.json", ApiDoc::create()))
     });
 

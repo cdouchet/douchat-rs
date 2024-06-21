@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "net.doggo-saloon.douchat",
+      "sha256_cert_fingerprints": [
+        "20:E4:4B:AD:9C:76:CD:4B:9E:4A:B9:F4:AC:9E:4B:8C:4E:84:4B:3B:60:E4:1D:89:AC:F8:29:D4:5F:4B:75:B2"
+      ]
+    }
+  }
+]

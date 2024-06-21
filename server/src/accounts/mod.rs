@@ -10,6 +10,7 @@ use uuid::Uuid;
 use crate::state::DouchatState;
 
 pub mod contact_routes;
+pub mod deep_link;
 
 #[post("/accounts")]
 pub async fn create_account(
