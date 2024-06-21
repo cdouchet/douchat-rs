@@ -44,7 +44,7 @@ class _LoginButtonState extends State<LoginButton> {
         switch (widget.loginButtonType) {
           case LoginButtonType.google:
             setState(() => loadingButtonStates[LoginButtonType.google] = true);
-            Provider.of<LoginProvider>(context, listen: false).signInWithGoogle(context);
+            Provider.of<LoginProvider>(context, listen: false).signInWithGoogle();
             setState(() => loadingButtonStates[LoginButtonType.google] = true);
             return;
           case LoginButtonType.apple:
