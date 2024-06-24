@@ -1,7 +1,9 @@
 use utoipa::{openapi::ServerBuilder, OpenApi};
 
 use self::paths::{PathId, PathUsername};
-use crate::accounts::{__path_get_user_by_uid, __path_get_user_by_username, __path_me};
+use crate::accounts::{
+    __path_complete_onboarding, __path_get_user_by_uid, __path_get_user_by_username, __path_me,
+};
 use crate::db::models::user::{NewUser, User};
 use crate::error::DouchatError;
 use crate::oauth::{
@@ -47,6 +49,7 @@ pub mod paths;
         get_user_by_uid,
         get_user_by_username,
         me,
+        complete_onboarding,
     )
 )]
 pub struct ApiDoc;

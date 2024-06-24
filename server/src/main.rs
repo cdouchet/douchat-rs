@@ -1,5 +1,6 @@
 use crate::env::API_PORT;
 use accounts::{
+    complete_onboarding,
     deep_link::{apple_app_site_association, asset_links_json},
     get_user_by_uid, get_user_by_username, me,
 };
@@ -58,6 +59,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .service(get_user_by_uid)
             .service(get_user_by_username)
             .service(me)
+            .service(complete_onboarding)
             .service(apple_auth)
             .service(google_auth)
             // REMOVE ON PROD

@@ -2,7 +2,7 @@ use crate::db::models::user::{NewUser, User};
 use crate::documentation::paths::{PathId, PathUsername};
 use crate::error::{DouchatError, Result};
 use crate::security::jwt::{Access, DouchatJWTClaims};
-use actix_web::get;
+use actix_web::{get, patch};
 use actix_web::{
     post,
     web::{Data, Json, Path},
@@ -95,4 +95,23 @@ pub async fn me(state: Data<DouchatState>, claims: DouchatJWTClaims<Access>) -> 
             .get_user_by_uid(claims.uid)?
             .ok_or(DouchatError::internal_server_error())?,
     ))
+}
+
+/// Complete Onboarding
+#[utoipa::path(
+    patch,
+    path = "/onboarding/complete",
+    tag = "Accounts",
+    responses(
+        (status = 200, description = "OK", body = String),
+        (status = 500, description = "Internal Server Error", body = DouchatError),
+    )
+)]
+#[patch("/onboarding/complete")]
+pub async fn complete_onboarding(
+    state: Data<DouchatState>,
+    claims: DouchatJWTClaims<Access>,
+) -> Result<String> {
+    state.db().complete_onboarding(claims.id)?;
+    Ok(String::from("Completed"))
 }

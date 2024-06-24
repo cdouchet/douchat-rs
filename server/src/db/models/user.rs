@@ -87,6 +87,7 @@ impl From<GoogleIdentityResponse> for NewUser {
 use diesel::result::Error as DieselError;
 
 impl DouchatPool {
+    /// Creates a new User from a NewUser struct
     pub fn create_user(&self, new_user: NewUser) -> Result<User> {
         let conn = &mut self.get_conn();
         diesel::insert_into(users::table)
@@ -143,5 +144,15 @@ impl DouchatPool {
                 e => Err(DouchatError::from(e)),
             },
         }
+    }
+
+    /// Marks onboarding of a user as completed
+    pub fn complete_onboarding(&self, id: i32) -> Result<()> {
+        let conn = &mut self.get_conn();
+        diesel::update(users::table)
+            .filter(users::id.eq(id))
+            .set(users::onboarding_completed.eq(true))
+            .execute(conn)?;
+        Ok(())
     }
 }
