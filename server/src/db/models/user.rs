@@ -31,7 +31,7 @@ pub struct User {
     status: Option<String>,
 }
 
-#[derive(Debug, Insertable, Deserialize, Serialize)]
+#[derive(Debug, Insertable, Deserialize, Serialize, ToSchema)]
 #[diesel(table_name = users)]
 pub struct NewUser {
     #[serde(skip_deserializing)]

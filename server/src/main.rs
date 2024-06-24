@@ -1,8 +1,7 @@
 use crate::env::API_PORT;
 use accounts::{
-    create_account,
     deep_link::{apple_app_site_association, asset_links_json},
-    get_user_by_uid, get_user_by_username,
+    get_user_by_uid, get_user_by_username, me,
 };
 use actix::Actor;
 use actix_web::{
@@ -56,9 +55,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .app_data(Data::new(state_addr.clone()))
             .route("/", get().to(index))
             .service(get_login_background)
-            .service(create_account)
             .service(get_user_by_uid)
             .service(get_user_by_username)
+            .service(me)
             .service(apple_auth)
             .service(google_auth)
             // REMOVE ON PROD
