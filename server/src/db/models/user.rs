@@ -29,6 +29,7 @@ pub struct User {
     verification_date: Option<DateTime<Utc>>,
     description: Option<String>,
     status: Option<String>,
+    onboarding_completed: bool,
 }
 
 #[derive(Debug, Insertable, Deserialize, Serialize, ToSchema)]

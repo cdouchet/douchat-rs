@@ -78,6 +78,7 @@ diesel::table! {
         verification_date -> Nullable<Timestamptz>,
         description -> Nullable<Varchar>,
         status -> Nullable<Varchar>,
+        onboarding_completed -> Bool,
     }
 }
 
