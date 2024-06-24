@@ -40,7 +40,7 @@ pub mod deep_link;
     params(PathId),
     responses(
         (status = 200, description = "Successfully created account", body = User),
-        (status = 404, description = "Not Found", body = None),
+        (status = 404, description = "Not Found"),
         (status = 401, description = "Bad Request", body = DouchatError),
         (status = 500, description = "Internal Server Error", body = DouchatError)
     )
@@ -63,7 +63,7 @@ pub async fn get_user_by_uid(
     params(PathUsername),
     responses(
         (status = 200, description = "Successfully created account", body = User),
-        (status = 404, description = "Not Found", body = None),
+        (status = 404, description = "Not Found"),
         (status = 401, description = "Bad Request", body = DouchatError),
         (status = 500, description = "Internal Server Error", body = DouchatError)
     )
