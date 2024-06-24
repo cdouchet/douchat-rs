@@ -43,6 +43,7 @@ impl GoogleSecret {
 }
 
 #[derive(Deserialize, Clone, Debug, ToSchema, IntoParams)]
+#[into_params(parameter_in = Query)]
 #[allow(dead_code)]
 pub struct GoogleOAuthPayload {
     code: String,
