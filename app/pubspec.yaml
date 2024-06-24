@@ -53,6 +53,7 @@ dependencies:
   result_type: ^0.2.0
   app_links: ^6.1.1
   google_sign_in: ^6.2.1
+  get_it: ^7.7.0
 
 dev_dependencies:
   flutter_test:

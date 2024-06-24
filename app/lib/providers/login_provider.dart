@@ -69,6 +69,7 @@ class LoginProvider extends ChangeNotifier {
     }
   }
 
+  // Listen for incoming app links for login oauth callback
   StreamSubscription<String> listenAppLinks(BuildContext context) {
     final appLinks = AppLinks();
     final subscription = appLinks.stringLinkStream.listen((event) {
