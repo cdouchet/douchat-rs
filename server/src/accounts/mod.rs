@@ -1,18 +1,17 @@
-use crate::db::models::user::{NewUser, User};
+use crate::db::models::user::User;
 use crate::documentation::paths::{PathId, PathUsername};
 use crate::error::{DouchatError, Result};
 use crate::security::jwt::{Access, DouchatJWTClaims};
+use actix_web::web::{Data, Json, Path};
 use actix_web::{get, patch};
-use actix_web::{
-    post,
-    web::{Data, Json, Path},
-};
 use uuid::Uuid;
 
 use crate::state::DouchatState;
 
 pub mod contact_routes;
 pub mod deep_link;
+pub mod devices_routes;
+pub mod onboarding_routes;
 
 // #[utoipa::path(
 //     post,

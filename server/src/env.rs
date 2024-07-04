@@ -4,6 +4,11 @@ use std::env::var;
 use crate::oauth::google::GoogleSecret;
 
 lazy_static! {
+    pub static ref DEBUG_MODE: bool = match var("DEBUG_MODE").unwrap_or(String::from("0")).as_ref()
+    {
+        "1" => true,
+        _ => false,
+    };
     pub static ref API_PORT: u16 = var("API_PORT")
         .expect("API_PORT must be set")
         .parse::<u16>()

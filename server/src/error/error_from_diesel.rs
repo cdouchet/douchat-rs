@@ -1,8 +1,13 @@
+use crate::env::DEBUG_MODE;
+
 use super::DouchatError;
 use diesel::result::{DatabaseErrorKind, Error};
 
 impl From<Error> for DouchatError {
     fn from(value: diesel::result::Error) -> Self {
+        if *DEBUG_MODE {
+            eprintln!("DIESEL ERROR: {:?}", value);
+        }
         match value {
             Error::NotFound => Self::not_found(Some(value.to_string())),
             Error::DatabaseError(kind, info) => match kind {

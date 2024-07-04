@@ -18,7 +18,7 @@ use messenger::{
     ws,
 };
 use oauth::{apple::apple_auth, google::google_auth};
-use security::jwt::{create_test_user, refresh_access_token, test_user, test_ws};
+use security::jwt::{create_test_user, refresh_access_token, test_ws};
 use state::DouchatState;
 use utoipa_swagger_ui::SwaggerUi;
 
@@ -62,8 +62,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .service(complete_onboarding)
             .service(apple_auth)
             .service(google_auth)
-            // REMOVE ON PROD
-            .service(test_user)
             .service(test_ws)
             .service(ws)
             .service(web::scope("/security").service(refresh_access_token))

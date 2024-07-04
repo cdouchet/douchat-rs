@@ -62,11 +62,12 @@ pub struct DouchatJWTClaims<T: DouchatTokenType> {
     iss: String,
     pub uid: Uuid,
     pub id: i32,
+    pub device_id: String,
     pub r#type: T,
 }
 
 impl<'a, T: DouchatTokenType + Deserialize<'static>> DouchatJWTClaims<T> {
-    pub fn new(uid: Uuid, id: i32, r#type: T) -> Self {
+    pub fn new(uid: Uuid, id: i32, device_id: &'a str, r#type: T) -> Self {
         let now_timer = SystemTime::now();
         let timer = now_timer + Duration::from_secs(605800);
         Self {
@@ -74,6 +75,7 @@ impl<'a, T: DouchatTokenType + Deserialize<'static>> DouchatJWTClaims<T> {
             iat: now_timer.duration_since(UNIX_EPOCH).unwrap().as_secs(),
             uid,
             id,
+            device_id: String::from(device_id),
             iss: JWT_ISSUER.to_string(),
             r#type,
         }
@@ -86,13 +88,14 @@ impl<'a, T: DouchatTokenType + Deserialize<'static>> DouchatJWTClaims<T> {
     }
 }
 
-pub fn access_and_refresh(
+pub fn access_and_refresh<'a>(
     uid: Uuid,
     id: i32,
+    device_id: &'a str,
 ) -> (DouchatJWTClaims<Access>, DouchatJWTClaims<Refresh>) {
     (
-        DouchatJWTClaims::new(uid, id, Access),
-        DouchatJWTClaims::new(uid, id, Refresh),
+        DouchatJWTClaims::new(uid, id, device_id, Access),
+        DouchatJWTClaims::new(uid, id, device_id, Refresh),
     )
 }
 
@@ -153,7 +156,7 @@ impl<T: DouchatTokenType + DeserializeOwned + 'static> FromRequest for DouchatJW
 pub async fn refresh_access_token(
     claims: DouchatJWTClaims<Refresh>,
 ) -> crate::error::Result<HttpResponse> {
-    let claims = access_and_refresh(claims.uid, claims.id);
+    let claims = access_and_refresh(claims.uid, claims.id, &claims.device_id);
     Ok(HttpResponseBuilder::new(StatusCode::OK)
         .cookie(claims.0.try_into()?)
         .cookie(claims.1.try_into()?)
@@ -170,15 +173,15 @@ pub fn create_test_user(state: DouchatState) -> crate::error::Result<()> {
     Ok(())
 }
 
-#[get("/test_user")]
-pub async fn test_user(state: Data<DouchatState>) -> crate::error::Result<HttpResponse> {
-    let user = state
-        .db()
-        .get_user_by_username("Test")?
-        .expect("Error: Test user was not created");
-    let claims = access_and_refresh(user.uid, user.id);
-    return Ok(response_with_token(user, claims)?);
-}
+// #[get("/test_user")]
+// pub async fn test_user(state: Data<DouchatState>) -> crate::error::Result<HttpResponse> {
+//     let user = state
+//         .db()
+//         .get_user_by_username("Test")?
+//         .expect("Error: Test user was not created");
+//     let claims = access_and_refresh(user.uid, user.id);
+//     return Ok(response_with_token(user, claims)?);
+// }
 
 #[get("/test_ws")]
 pub async fn test_ws() -> HttpResponse {

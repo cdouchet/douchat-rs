@@ -19,12 +19,13 @@ use crate::{
     state::DouchatState,
 };
 
-#[derive(Debug, Deserialize, ToSchema)]
+#[derive(Debug, Deserialize, Clone, ToSchema)]
 pub struct AppleOauthPayload {
     // pub code: String,
     // pub state: Option<String>,
     pub id_token: String,
     pub user: Option<AppleUser>,
+    pub device_id: String,
 }
 
 #[allow(unused)]
@@ -141,13 +142,13 @@ pub async fn apple_auth(
     let claims = payload.get_claims().await?;
     match state.db().email_exists(&claims.email)? {
         Some(user) => {
-            let claims = access_and_refresh(user.uid, user.id);
+            let claims = access_and_refresh(user.uid, user.id, &payload.device_id);
             return Ok(response_with_token(user, claims)?);
         }
         None => {
-            let new_user = NewUser::from((payload, claims));
+            let new_user = NewUser::from((payload.clone(), claims));
             let user = state.db().create_user(new_user)?;
-            let claims = access_and_refresh(user.uid, user.id);
+            let claims = access_and_refresh(user.uid, user.id, &payload.device_id);
             return Ok(response_with_token(user, claims)?);
         }
     }

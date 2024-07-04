@@ -50,6 +50,7 @@ pub struct GoogleOAuthPayload {
     scope: String,
     authuser: String,
     state: String,
+    device_id: String,
 }
 
 #[derive(Debug, Serialize)]
@@ -198,7 +199,7 @@ pub async fn google_auth(
     let user = state.db().email_exists(&identity.email)?;
     match user {
         Some(user) => {
-            let claims = access_and_refresh(user.uid, user.id);
+            let claims = access_and_refresh(user.uid, user.id, &params.device_id);
             return Ok(response_with_token(user, claims)?);
         }
         None => {
@@ -208,7 +209,7 @@ pub async fn google_auth(
                 new_user.verification_date = None;
             }
             let user = state.db().create_user(new_user)?;
-            let claims = access_and_refresh(user.uid, user.id);
+            let claims = access_and_refresh(user.uid, user.id, &params.device_id);
             return Ok(response_with_token(user, claims)?);
         }
     }

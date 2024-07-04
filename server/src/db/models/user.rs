@@ -155,4 +155,13 @@ impl DouchatPool {
             .execute(conn)?;
         Ok(())
     }
+
+    pub fn update_username(&self, user_id: i32, username: String) -> Result<()> {
+        let conn = &mut self.get_conn();
+        diesel::update(users::table)
+            .filter(users::id.eq(user_id))
+            .set(users::username.eq(username))
+            .execute(conn)?;
+        Ok(())
+    }
 }
