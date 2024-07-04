@@ -1,13 +1,24 @@
-{
+  {
+    "activitycontinuation": {
+      "apps": [
+        "9XGJZ44QS5.net.doggo-saloon.douchat"
+      ]
+    },
     "applinks": {
-      "apps": [],
       "details": [
         {
-            "appID": "9XGJZ44QS5.net.doggo-saloon.douchat",
-            "paths": [
-                "*"
-            ]
+          "appIDs": [
+            "9XGJZ44QS5.net.doggo-saloon.douchat"
+          ],
+          "components": [
+            {
+              "/": "/*",
+              "exclude": false,
+              "comment": "Matches all URLs"
+            }
+          ]
         }
       ]
     }
   }
+  
