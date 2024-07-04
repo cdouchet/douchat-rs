@@ -9,7 +9,10 @@ use crate::accounts::{
     },
     onboarding_routes::{UsernameUpdateForm, __path_update_username},
 };
-use crate::db::models::user::{NewUser, User};
+use crate::db::models::{
+    user::{NewUser, User},
+    user_device::UserDevice,
+};
 use crate::error::DouchatError;
 use crate::oauth::{
     apple::{AppleName, AppleOauthPayload, AppleUser, __path_apple_auth},
@@ -44,6 +47,7 @@ pub mod paths;
             PathId,
             PathUsername,
             AppendNotificationTokenForm,
+            UserDevice,
             AppendUserDeviceForm,
             UsernameUpdateForm,
             DouchatError
