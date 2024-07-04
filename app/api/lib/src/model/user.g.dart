@@ -10,6 +10,8 @@ class _$User extends User {
   @override
   final DateTime createdAt;
   @override
+  final bool onboardingCompleted;
+  @override
   final String uid;
   @override
   final DateTime updatedAt;
@@ -29,6 +31,7 @@ class _$User extends User {
 
   _$User._(
       {required this.createdAt,
+      required this.onboardingCompleted,
       required this.uid,
       required this.updatedAt,
       this.description,
@@ -38,6 +41,8 @@ class _$User extends User {
       this.verificationDate})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(createdAt, r'User', 'createdAt');
+    BuiltValueNullFieldError.checkNotNull(
+        onboardingCompleted, r'User', 'onboardingCompleted');
     BuiltValueNullFieldError.checkNotNull(uid, r'User', 'uid');
     BuiltValueNullFieldError.checkNotNull(updatedAt, r'User', 'updatedAt');
   }
@@ -54,6 +59,7 @@ class _$User extends User {
     if (identical(other, this)) return true;
     return other is User &&
         createdAt == other.createdAt &&
+        onboardingCompleted == other.onboardingCompleted &&
         uid == other.uid &&
         updatedAt == other.updatedAt &&
         description == other.description &&
@@ -67,6 +73,7 @@ class _$User extends User {
   int get hashCode {
     var _$hash = 0;
     _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, onboardingCompleted.hashCode);
     _$hash = $jc(_$hash, uid.hashCode);
     _$hash = $jc(_$hash, updatedAt.hashCode);
     _$hash = $jc(_$hash, description.hashCode);
@@ -82,6 +89,7 @@ class _$User extends User {
   String toString() {
     return (newBuiltValueToStringHelper(r'User')
           ..add('createdAt', createdAt)
+          ..add('onboardingCompleted', onboardingCompleted)
           ..add('uid', uid)
           ..add('updatedAt', updatedAt)
           ..add('description', description)
@@ -99,6 +107,11 @@ class UserBuilder implements Builder<User, UserBuilder> {
   DateTime? _createdAt;
   DateTime? get createdAt => _$this._createdAt;
   set createdAt(DateTime? createdAt) => _$this._createdAt = createdAt;
+
+  bool? _onboardingCompleted;
+  bool? get onboardingCompleted => _$this._onboardingCompleted;
+  set onboardingCompleted(bool? onboardingCompleted) =>
+      _$this._onboardingCompleted = onboardingCompleted;
 
   String? _uid;
   String? get uid => _$this._uid;
@@ -137,6 +150,7 @@ class UserBuilder implements Builder<User, UserBuilder> {
     final $v = _$v;
     if ($v != null) {
       _createdAt = $v.createdAt;
+      _onboardingCompleted = $v.onboardingCompleted;
       _uid = $v.uid;
       _updatedAt = $v.updatedAt;
       _description = $v.description;
@@ -168,6 +182,8 @@ class UserBuilder implements Builder<User, UserBuilder> {
         new _$User._(
             createdAt: BuiltValueNullFieldError.checkNotNull(
                 createdAt, r'User', 'createdAt'),
+            onboardingCompleted: BuiltValueNullFieldError.checkNotNull(
+                onboardingCompleted, r'User', 'onboardingCompleted'),
             uid: BuiltValueNullFieldError.checkNotNull(uid, r'User', 'uid'),
             updatedAt: BuiltValueNullFieldError.checkNotNull(
                 updatedAt, r'User', 'updatedAt'),

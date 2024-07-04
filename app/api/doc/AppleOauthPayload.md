@@ -8,6 +8,7 @@ import 'package:api/api.dart';
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**deviceId** | **String** |  | 
 **idToken** | **String** |  | 
 **user** | [**AppleUser**](AppleUser.md) |  | [optional] 
 

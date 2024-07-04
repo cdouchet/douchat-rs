@@ -12,6 +12,7 @@ part 'user.g.dart';
 ///
 /// Properties:
 /// * [createdAt]
+/// * [onboardingCompleted]
 /// * [uid]
 /// * [updatedAt]
 /// * [description]
@@ -23,6 +24,9 @@ part 'user.g.dart';
 abstract class User implements Built<User, UserBuilder> {
   @BuiltValueField(wireName: r'created_at')
   DateTime get createdAt;
+
+  @BuiltValueField(wireName: r'onboarding_completed')
+  bool get onboardingCompleted;
 
   @BuiltValueField(wireName: r'uid')
   String get uid;
@@ -72,6 +76,11 @@ class _$UserSerializer implements PrimitiveSerializer<User> {
     yield serializers.serialize(
       object.createdAt,
       specifiedType: const FullType(DateTime),
+    );
+    yield r'onboarding_completed';
+    yield serializers.serialize(
+      object.onboardingCompleted,
+      specifiedType: const FullType(bool),
     );
     yield r'uid';
     yield serializers.serialize(
@@ -149,6 +158,13 @@ class _$UserSerializer implements PrimitiveSerializer<User> {
             specifiedType: const FullType(DateTime),
           ) as DateTime;
           result.createdAt = valueDes;
+          break;
+        case r'onboarding_completed':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(bool),
+          ) as bool;
+          result.onboardingCompleted = valueDes;
           break;
         case r'uid':
           final valueDes = serializers.deserialize(

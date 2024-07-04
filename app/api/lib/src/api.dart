@@ -9,11 +9,14 @@ import 'package:api/src/auth/api_key_auth.dart';
 import 'package:api/src/auth/basic_auth.dart';
 import 'package:api/src/auth/bearer_auth.dart';
 import 'package:api/src/auth/oauth.dart';
+import 'package:api/src/api/accounts_api.dart';
+import 'package:api/src/api/devices_api.dart';
 import 'package:api/src/api/login_api.dart';
 import 'package:api/src/api/o_auth_api.dart';
+import 'package:api/src/api/onboarding_api.dart';
 
 class Api {
-  static const String basePath = r'http://localhost:3000';
+  static const String basePath = r'https://douchat-api.doggo-saloon.net';
 
   final Dio dio;
   final Serializers serializers;
@@ -77,6 +80,18 @@ class Api {
     }
   }
 
+  /// Get AccountsApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  AccountsApi getAccountsApi() {
+    return AccountsApi(dio, serializers);
+  }
+
+  /// Get DevicesApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  DevicesApi getDevicesApi() {
+    return DevicesApi(dio, serializers);
+  }
+
   /// Get LoginApi instance, base route and serializer can be overridden by a given but be careful,
   /// by doing that all interceptors will not be executed
   LoginApi getLoginApi() {
@@ -87,5 +102,11 @@ class Api {
   /// by doing that all interceptors will not be executed
   OAuthApi getOAuthApi() {
     return OAuthApi(dio, serializers);
+  }
+
+  /// Get OnboardingApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  OnboardingApi getOnboardingApi() {
+    return OnboardingApi(dio, serializers);
   }
 }

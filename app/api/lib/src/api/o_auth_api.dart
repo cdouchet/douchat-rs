@@ -123,6 +123,7 @@ class OAuthApi {
   /// * [scope]
   /// * [authuser]
   /// * [state]
+  /// * [deviceId]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -137,6 +138,7 @@ class OAuthApi {
     required String scope,
     required String authuser,
     required String state,
+    required String deviceId,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -144,23 +146,7 @@ class OAuthApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/login/google'
-        .replaceAll(
-            '{' r'code' '}',
-            encodeQueryParameter(_serializers, code, const FullType(String))
-                .toString())
-        .replaceAll(
-            '{' r'scope' '}',
-            encodeQueryParameter(_serializers, scope, const FullType(String))
-                .toString())
-        .replaceAll(
-            '{' r'authuser' '}',
-            encodeQueryParameter(_serializers, authuser, const FullType(String))
-                .toString())
-        .replaceAll(
-            '{' r'state' '}',
-            encodeQueryParameter(_serializers, state, const FullType(String))
-                .toString());
+    final _path = r'/login/google';
     final _options = Options(
       method: r'GET',
       headers: <String, dynamic>{
@@ -173,9 +159,22 @@ class OAuthApi {
       validateStatus: validateStatus,
     );
 
+    final _queryParameters = <String, dynamic>{
+      r'code': encodeQueryParameter(_serializers, code, const FullType(String)),
+      r'scope':
+          encodeQueryParameter(_serializers, scope, const FullType(String)),
+      r'authuser':
+          encodeQueryParameter(_serializers, authuser, const FullType(String)),
+      r'state':
+          encodeQueryParameter(_serializers, state, const FullType(String)),
+      r'device_id':
+          encodeQueryParameter(_serializers, deviceId, const FullType(String)),
+    };
+
     final _response = await _dio.request<Object>(
       _path,
       options: _options,
+      queryParameters: _queryParameters,
       cancelToken: cancelToken,
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,

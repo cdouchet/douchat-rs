@@ -9,6 +9,7 @@ import 'package:api/api.dart';
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **createdAt** | [**DateTime**](DateTime.md) |  | 
+**onboardingCompleted** | **bool** |  | 
 **uid** | **String** |  | 
 **updatedAt** | [**DateTime**](DateTime.md) |  | 
 **description** | **String** |  | [optional] 

@@ -6,8 +6,13 @@ void main() {
   final instance = Api().getOAuthApi();
 
   group(OAuthApi, () {
-    //Future<User> appleAuth(String code, String idToken, { String state, AppleUser user }) async
+    //Future<User> appleAuth(AppleOauthPayload appleOauthPayload) async
     test('test appleAuth', () async {
+      // TODO
+    });
+
+    //Future<User> googleAuth(String code, String scope, String authuser, String state, String deviceId) async
+    test('test googleAuth', () async {
       // TODO
     });
   });

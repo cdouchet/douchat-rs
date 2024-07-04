@@ -12,6 +12,8 @@ class _$GoogleOAuthPayload extends GoogleOAuthPayload {
   @override
   final String code;
   @override
+  final String deviceId;
+  @override
   final String scope;
   @override
   final String state;
@@ -23,12 +25,15 @@ class _$GoogleOAuthPayload extends GoogleOAuthPayload {
   _$GoogleOAuthPayload._(
       {required this.authuser,
       required this.code,
+      required this.deviceId,
       required this.scope,
       required this.state})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         authuser, r'GoogleOAuthPayload', 'authuser');
     BuiltValueNullFieldError.checkNotNull(code, r'GoogleOAuthPayload', 'code');
+    BuiltValueNullFieldError.checkNotNull(
+        deviceId, r'GoogleOAuthPayload', 'deviceId');
     BuiltValueNullFieldError.checkNotNull(
         scope, r'GoogleOAuthPayload', 'scope');
     BuiltValueNullFieldError.checkNotNull(
@@ -50,6 +55,7 @@ class _$GoogleOAuthPayload extends GoogleOAuthPayload {
     return other is GoogleOAuthPayload &&
         authuser == other.authuser &&
         code == other.code &&
+        deviceId == other.deviceId &&
         scope == other.scope &&
         state == other.state;
   }
@@ -59,6 +65,7 @@ class _$GoogleOAuthPayload extends GoogleOAuthPayload {
     var _$hash = 0;
     _$hash = $jc(_$hash, authuser.hashCode);
     _$hash = $jc(_$hash, code.hashCode);
+    _$hash = $jc(_$hash, deviceId.hashCode);
     _$hash = $jc(_$hash, scope.hashCode);
     _$hash = $jc(_$hash, state.hashCode);
     _$hash = $jf(_$hash);
@@ -70,6 +77,7 @@ class _$GoogleOAuthPayload extends GoogleOAuthPayload {
     return (newBuiltValueToStringHelper(r'GoogleOAuthPayload')
           ..add('authuser', authuser)
           ..add('code', code)
+          ..add('deviceId', deviceId)
           ..add('scope', scope)
           ..add('state', state))
         .toString();
@@ -88,6 +96,10 @@ class GoogleOAuthPayloadBuilder
   String? get code => _$this._code;
   set code(String? code) => _$this._code = code;
 
+  String? _deviceId;
+  String? get deviceId => _$this._deviceId;
+  set deviceId(String? deviceId) => _$this._deviceId = deviceId;
+
   String? _scope;
   String? get scope => _$this._scope;
   set scope(String? scope) => _$this._scope = scope;
@@ -105,6 +117,7 @@ class GoogleOAuthPayloadBuilder
     if ($v != null) {
       _authuser = $v.authuser;
       _code = $v.code;
+      _deviceId = $v.deviceId;
       _scope = $v.scope;
       _state = $v.state;
       _$v = null;
@@ -133,6 +146,8 @@ class GoogleOAuthPayloadBuilder
                 authuser, r'GoogleOAuthPayload', 'authuser'),
             code: BuiltValueNullFieldError.checkNotNull(
                 code, r'GoogleOAuthPayload', 'code'),
+            deviceId: BuiltValueNullFieldError.checkNotNull(
+                deviceId, r'GoogleOAuthPayload', 'deviceId'),
             scope: BuiltValueNullFieldError.checkNotNull(
                 scope, r'GoogleOAuthPayload', 'scope'),
             state: BuiltValueNullFieldError.checkNotNull(

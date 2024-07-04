@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **authuser** | **String** |  | 
 **code** | **String** |  | 
+**deviceId** | **String** |  | 
 **scope** | **String** |  | 
 **state** | **String** |  | 
 

@@ -12,11 +12,15 @@ part 'apple_oauth_payload.g.dart';
 /// AppleOauthPayload
 ///
 /// Properties:
+/// * [deviceId]
 /// * [idToken]
 /// * [user]
 @BuiltValue()
 abstract class AppleOauthPayload
     implements Built<AppleOauthPayload, AppleOauthPayloadBuilder> {
+  @BuiltValueField(wireName: r'device_id')
+  String get deviceId;
+
   @BuiltValueField(wireName: r'id_token')
   String get idToken;
 
@@ -49,6 +53,11 @@ class _$AppleOauthPayloadSerializer
     AppleOauthPayload object, {
     FullType specifiedType = FullType.unspecified,
   }) sync* {
+    yield r'device_id';
+    yield serializers.serialize(
+      object.deviceId,
+      specifiedType: const FullType(String),
+    );
     yield r'id_token';
     yield serializers.serialize(
       object.idToken,
@@ -86,6 +95,13 @@ class _$AppleOauthPayloadSerializer
       final key = serializedList[i] as String;
       final value = serializedList[i + 1];
       switch (key) {
+        case r'device_id':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(String),
+          ) as String;
+          result.deviceId = valueDes;
+          break;
         case r'id_token':
           final valueDes = serializers.deserialize(
             value,

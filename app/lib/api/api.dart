@@ -1,4 +1,5 @@
-// Openapi Generator last run: : 2024-06-21T14:07:15.978390
+// Openapi Generator last run: : 2024-07-04T17:10:53.260378
+import 'package:app/providers/login_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:openapi_generator_annotations/openapi_generator_annotations.dart';
 import 'package:api/api.dart' as generatedApi;
@@ -19,4 +20,6 @@ final String apiUrl = dotenv.env['API_URL']!;
 )
 class Api {}
 
-final api = generatedApi.Api();
+final api = generatedApi.Api(
+  interceptors: [cookieManager]
+);

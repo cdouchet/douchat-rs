@@ -12,6 +12,11 @@ void main() {
       // TODO
     });
 
+    // bool onboardingCompleted
+    test('to test the property `onboardingCompleted`', () async {
+      // TODO
+    });
+
     // String uid
     test('to test the property `uid`', () async {
       // TODO

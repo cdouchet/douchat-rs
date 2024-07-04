@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:app/providers/login_provider.dart';
 import 'package:app/providers/user_provider.dart';
 import 'package:app/router.dart';
-import 'package:app/themes/light.dart';
-import 'package:app/views/login.dart';
+import 'package:app/themes/light/light.dart';
+import 'package:app/views/start_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -36,7 +36,7 @@ class Douchat extends StatelessWidget {
       child: MaterialApp(
         theme: lightThemeData,
         routes: DouchatRouter.instance.buildRoutes(),
-        initialRoute: LoginView.routeName,
+        initialRoute: StartView.routeName,
         debugShowCheckedModeBanner: false,
       ),
     );

@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:app/components/login/login_button.dart';
+import 'package:app/providers/login_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:video_player/video_player.dart';
 
@@ -19,6 +23,19 @@ class _LoginViewState extends State<LoginView> {
         ..setLooping(true)
         ..setVolume(0)
         ..play();
+  late StreamSubscription<String> loginAppLinksSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    loginAppLinksSubscription = context.read<LoginProvider>().listenAppLinks(context);
+  }
+
+  @override
+  void dispose() {
+    loginAppLinksSubscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

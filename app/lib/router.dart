@@ -1,5 +1,7 @@
 import 'package:app/modules/home/home.dart';
+import 'package:app/modules/onboarding/onboarding.dart';
 import 'package:app/views/login.dart';
+import 'package:app/views/start_view.dart';
 import 'package:flutter/material.dart';
 
 class DouchatRouter {
@@ -8,6 +10,8 @@ class DouchatRouter {
   DouchatRouter._internal();
 
   Map<String, Widget Function(BuildContext)> buildRoutes() => {
+        StartView.routeName: (context) => const StartView(),
+        OnboardingView.routeName: (context) => const OnboardingView(),
         LoginView.routeName: (context) => const LoginView(),
         Home.routeName: (context) => const Home(),
       };

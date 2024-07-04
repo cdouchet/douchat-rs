@@ -2,15 +2,28 @@ import 'dart:async';
 
 import 'package:api/api.dart';
 import 'package:app/api/api.dart';
+import 'package:app/helpers/device_info.dart';
+import 'package:app/main.dart';
 import 'package:app/modules/home/home.dart';
+import 'package:app/modules/onboarding/onboarding.dart';
 import 'package:app/providers/user_provider.dart';
 import 'package:app/utils/clair_snackbar.dart';
 import 'package:app_links/app_links.dart';
+import 'package:cookie_jar/cookie_jar.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+final cookieManager = CookieManager(
+  PersistCookieJar(
+    ignoreExpires: true,
+    storage: FileStorage("${applicationDocumentsDirectory.path}/.cookies"),
+  ),
+);
 
 class LoginProvider extends ChangeNotifier {
   Future<void> signInWithApple(BuildContext context) async {
@@ -60,7 +73,7 @@ class LoginProvider extends ChangeNotifier {
       final redirectUri = "$apiUrl/login/google";
       final url =
           """https://accounts.google.com/o/oauth2/auth/oauthchooseaccount?response_type=code&client_id=$clientId&redirect_uri=$redirectUri&scope=email profile openid&prompt=select_account&state={"isPlatformWeb":false,"isFlutter":true}""";
-          print(url);
+      print(url);
       launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
       print("");
     } catch (e, s) {
@@ -72,11 +85,12 @@ class LoginProvider extends ChangeNotifier {
   // Listen for incoming app links for login oauth callback
   StreamSubscription<String> listenAppLinks(BuildContext context) {
     final appLinks = AppLinks();
-    final subscription = appLinks.stringLinkStream.listen((event) {
+    final subscription = appLinks.stringLinkStream.listen((event) async {
       // Handling Google auth callback
       if (event.contains("google")) {
         final uri = Uri.parse(event);
         final params = uri.queryParameters;
+        print("Before loging with google");
         api
             .getOAuthApi()
             .googleAuth(
@@ -84,8 +98,10 @@ class LoginProvider extends ChangeNotifier {
               scope: "",
               authuser: "",
               state: "",
+              deviceId: await DeviceInfo.instance.getDeviceId(),
             )
             .then((res) {
+          print("Success login with google");
           if (res.statusCode == 200) {
             _setUserAndPush(context, res.data!);
             return;
@@ -147,8 +163,8 @@ class LoginProvider extends ChangeNotifier {
 
   void _setUserAndPush(BuildContext context, User user) {
     Provider.of<UserProvider>(context, listen: false).changeUser(user);
-    if (user.username == null) {
-      // TODO: Push to onboarding
+    if (!user.onboardingCompleted) {
+      Navigator.pushReplacementNamed(context, OnboardingView.routeName);
       return;
     }
     Navigator.pushReplacementNamed(context, Home.routeName);

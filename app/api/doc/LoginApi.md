@@ -5,7 +5,7 @@
 import 'package:api/api.dart';
 ```
 
-All URIs are relative to *http://localhost:3000*
+All URIs are relative to *https://douchat-api.doggo-saloon.net*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

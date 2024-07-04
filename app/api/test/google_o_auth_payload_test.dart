@@ -17,6 +17,11 @@ void main() {
       // TODO
     });
 
+    // String deviceId
+    test('to test the property `deviceId`', () async {
+      // TODO
+    });
+
     // String scope
     test('to test the property `scope`', () async {
       // TODO

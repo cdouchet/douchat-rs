@@ -7,18 +7,13 @@ void main() {
   // TODO add properties to the builder and call build()
 
   group(AppleOauthPayload, () {
-    // String code
-    test('to test the property `code`', () async {
+    // String deviceId
+    test('to test the property `deviceId`', () async {
       // TODO
     });
 
     // String idToken
     test('to test the property `idToken`', () async {
-      // TODO
-    });
-
-    // String state
-    test('to test the property `state`', () async {
       // TODO
     });
 

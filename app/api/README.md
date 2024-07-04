@@ -46,35 +46,51 @@ Please follow the [installation procedure](#installation--usage) and then run th
 import 'package:api/api.dart';
 
 
-final api = Api().getLoginApi();
+final api = Api().getAccountsApi();
 
 try {
-    api.refreshAccessToken();
+    final response = await api.completeOnboarding();
+    print(response);
 } catch on DioException (e) {
-    print("Exception when calling LoginApi->refreshAccessToken: $e\n");
+    print("Exception when calling AccountsApi->completeOnboarding: $e\n");
 }
 
 ```
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://localhost:3000*
+All URIs are relative to *https://douchat-api.doggo-saloon.net*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+[*AccountsApi*](doc/AccountsApi.md) | [**completeOnboarding**](doc/AccountsApi.md#completeonboarding) | **PATCH** /onboarding/complete | Complete Onboarding
+[*AccountsApi*](doc/AccountsApi.md) | [**getUserByUid**](doc/AccountsApi.md#getuserbyuid) | **GET** /accounts/id/{id} | 
+[*AccountsApi*](doc/AccountsApi.md) | [**getUserByUsername**](doc/AccountsApi.md#getuserbyusername) | **GET** /accounts/username/{username} | 
+[*AccountsApi*](doc/AccountsApi.md) | [**me**](doc/AccountsApi.md#me) | **GET** /me | 
+[*DevicesApi*](doc/DevicesApi.md) | [**appendDevice**](doc/DevicesApi.md#appenddevice) | **PUT** /user/devices | Append Device
+[*DevicesApi*](doc/DevicesApi.md) | [**appendNotificationToken**](doc/DevicesApi.md#appendnotificationtoken) | **PUT** /user/devices/token | Send Notification Token
+[*DevicesApi*](doc/DevicesApi.md) | [**getUserDevices**](doc/DevicesApi.md#getuserdevices) | **GET** /user/devices | Get Devices
 [*LoginApi*](doc/LoginApi.md) | [**refreshAccessToken**](doc/LoginApi.md#refreshaccesstoken) | **GET** /token/refresh | 
 [*OAuthApi*](doc/OAuthApi.md) | [**appleAuth**](doc/OAuthApi.md#appleauth) | **POST** /login/apple | 
 [*OAuthApi*](doc/OAuthApi.md) | [**googleAuth**](doc/OAuthApi.md#googleauth) | **GET** /login/google | 
+[*OnboardingApi*](doc/OnboardingApi.md) | [**updateUsername**](doc/OnboardingApi.md#updateusername) | **PATCH** /username | Update Username
 
 
 ## Documentation For Models
 
+ - [AppendNotificationTokenForm](doc/AppendNotificationTokenForm.md)
+ - [AppendUserDeviceForm](doc/AppendUserDeviceForm.md)
  - [AppleName](doc/AppleName.md)
  - [AppleOauthPayload](doc/AppleOauthPayload.md)
  - [AppleUser](doc/AppleUser.md)
  - [DouchatError](doc/DouchatError.md)
  - [GoogleOAuthPayload](doc/GoogleOAuthPayload.md)
+ - [NewUser](doc/NewUser.md)
+ - [PathId](doc/PathId.md)
+ - [PathUsername](doc/PathUsername.md)
  - [User](doc/User.md)
+ - [UserDevice](doc/UserDevice.md)
+ - [UsernameUpdateForm](doc/UsernameUpdateForm.md)
 
 
 ## Documentation For Authorization

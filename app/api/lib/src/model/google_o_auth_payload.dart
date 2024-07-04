@@ -13,6 +13,7 @@ part 'google_o_auth_payload.g.dart';
 /// Properties:
 /// * [authuser]
 /// * [code]
+/// * [deviceId]
 /// * [scope]
 /// * [state]
 @BuiltValue()
@@ -23,6 +24,9 @@ abstract class GoogleOAuthPayload
 
   @BuiltValueField(wireName: r'code')
   String get code;
+
+  @BuiltValueField(wireName: r'device_id')
+  String get deviceId;
 
   @BuiltValueField(wireName: r'scope')
   String get scope;
@@ -64,6 +68,11 @@ class _$GoogleOAuthPayloadSerializer
     yield r'code';
     yield serializers.serialize(
       object.code,
+      specifiedType: const FullType(String),
+    );
+    yield r'device_id';
+    yield serializers.serialize(
+      object.deviceId,
       specifiedType: const FullType(String),
     );
     yield r'scope';
@@ -114,6 +123,13 @@ class _$GoogleOAuthPayloadSerializer
             specifiedType: const FullType(String),
           ) as String;
           result.code = valueDes;
+          break;
+        case r'device_id':
+          final valueDes = serializers.deserialize(
+            value,
+            specifiedType: const FullType(String),
+          ) as String;
+          result.deviceId = valueDes;
           break;
         case r'scope':
           final valueDes = serializers.deserialize(

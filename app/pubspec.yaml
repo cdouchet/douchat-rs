@@ -54,6 +54,9 @@ dependencies:
   app_links: ^6.1.1
   google_sign_in: ^6.2.1
   get_it: ^7.7.0
+  file_picker: ^8.0.6
+  permission_handler: ^11.3.1
+  device_info_plus: ^10.1.0
 
 dev_dependencies:
   flutter_test:
@@ -83,6 +86,7 @@ flutter:
     - assets/
     - assets/logos/
     - assets/videos/
+    - assets/icons/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -116,4 +120,4 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 # dependency_overrides:
-#   analyzer: 1.0.0
+#   analyzer: 6.5.1

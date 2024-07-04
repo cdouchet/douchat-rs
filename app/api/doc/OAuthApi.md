@@ -5,7 +5,7 @@
 import 'package:api/api.dart';
 ```
 
-All URIs are relative to *http://localhost:3000*
+All URIs are relative to *https://douchat-api.doggo-saloon.net*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -55,7 +55,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **googleAuth**
-> User googleAuth(code, scope, authuser, state)
+> User googleAuth(code, scope, authuser, state, deviceId)
 
 
 
@@ -68,9 +68,10 @@ final String code = code_example; // String |
 final String scope = scope_example; // String | 
 final String authuser = authuser_example; // String | 
 final String state = state_example; // String | 
+final String deviceId = deviceId_example; // String | 
 
 try {
-    final response = api.googleAuth(code, scope, authuser, state);
+    final response = api.googleAuth(code, scope, authuser, state, deviceId);
     print(response);
 } catch on DioException (e) {
     print('Exception when calling OAuthApi->googleAuth: $e\n');
@@ -85,6 +86,7 @@ Name | Type | Description  | Notes
  **scope** | **String**|  | 
  **authuser** | **String**|  | 
  **state** | **String**|  | 
+ **deviceId** | **String**|  | 
 
 ### Return type
 
