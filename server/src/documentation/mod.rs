@@ -4,9 +4,10 @@ use self::paths::{PathId, PathUsername};
 use crate::accounts::{
     __path_complete_onboarding, __path_get_user_by_uid, __path_get_user_by_username, __path_me,
     devices_routes::{
-        __path_append_device, __path_append_notification_token, __path_get_user_devices,
+        AppendNotificationTokenForm, AppendUserDeviceForm, __path_append_device,
+        __path_append_notification_token, __path_get_user_devices,
     },
-    onboarding_routes::__path_update_username,
+    onboarding_routes::{UsernameUpdateForm, __path_update_username},
 };
 use crate::db::models::user::{NewUser, User};
 use crate::error::DouchatError;
@@ -42,6 +43,9 @@ pub mod paths;
             GoogleOAuthPayload,
             PathId,
             PathUsername,
+            AppendNotificationTokenForm,
+            AppendUserDeviceForm,
+            UsernameUpdateForm,
             DouchatError
         )
     ),
