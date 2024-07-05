@@ -5,6 +5,7 @@ use actix_web::{
     HttpResponse,
 };
 use serde::Deserialize;
+use utoipa::{IntoParams, ToSchema};
 use uuid::Uuid;
 
 use crate::{
@@ -13,11 +14,23 @@ use crate::{
     state::DouchatState,
 };
 
-#[derive(Deserialize)]
+#[derive(Deserialize, IntoParams, ToSchema)]
 pub struct QueryUid {
     uid: Uuid,
 }
 
+#[utoipa::path(
+    get,
+    path = "/user/picture/{uid}",
+    params(QueryUid),
+    responses(
+        (status = 200, description = "Successfully fetched user picture", content_type = "application/octet-stream"),
+        (status = 400, description = "Bad Request", body = DouchatError),
+        (status = 401, description = "Unauthorized", body = DouchatError),
+        (status = 404, description = "Not Found", body = DouchatError),
+        (status = 500, description = "Internal Server Error", body = DouchatError),
+    )
+)]
 #[get("/user/picture/{uid}")]
 pub async fn get_user_picture(
     state: Data<DouchatState>,

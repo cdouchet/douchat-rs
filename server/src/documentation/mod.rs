@@ -9,6 +9,7 @@ use crate::accounts::{
     },
     onboarding_routes::{UsernameUpdateForm, __path_update_username, __path_upload_user_picture},
 };
+use crate::cdn::picture::{QueryUid, __path_get_user_picture};
 use crate::db::models::{
     user::{NewUser, User},
     user_device::UserDevice,
@@ -51,6 +52,7 @@ pub mod paths;
             UserDevice,
             UserPicture,
             UserPictureMultipart,
+            QueryUid,
             AppendUserDeviceForm,
             UsernameUpdateForm,
             DouchatError
@@ -69,6 +71,8 @@ pub mod paths;
         google_auth,
         // Login
         refresh_access_token,
+        // Cdn
+        get_user_picture,
         // Accounts
         get_user_by_uid,
         get_user_by_username,
