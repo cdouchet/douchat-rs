@@ -13,7 +13,6 @@ use utoipa::ToSchema;
 pub struct UserDevice {
     created_at: DateTime<Utc>,
     updated_at: DateTime<Utc>,
-    #[serde(skip_serializing)]
     id: i64,
     #[serde(skip_serializing)]
     user_id: i32,
