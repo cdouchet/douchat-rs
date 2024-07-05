@@ -36,7 +36,8 @@ pub mod paths;
         (name = "Login", description = "Traditional ways to authenticate"),
         (name = "Accounts", description = "Accounts"),
         (name = "Onboarding", description = "Onboarding"),
-        (name = "Devices", description = "Update and modify user devices")
+        (name = "Devices", description = "Update and modify user devices"),
+        (name = "Cdn", description = "Media routes")
     ),
     components(
         schemas(

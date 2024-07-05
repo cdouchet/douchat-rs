@@ -44,6 +44,7 @@ pub async fn update_username(
 #[utoipa::path(
     put,
     path = "/user/picture",
+    tag = "Onboarding",
     request_body(content = UserPictureMultipart, content_type = "multipart/form-data"),
     responses(
         (status = 200, description = "Successfully upserted user picture", body = UserPicture),

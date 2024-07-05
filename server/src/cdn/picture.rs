@@ -22,6 +22,7 @@ pub struct QueryUid {
 #[utoipa::path(
     get,
     path = "/user/picture/{uid}",
+    tag = "Cdn",
     params(QueryUid),
     responses(
         (status = 200, description = "Successfully fetched user picture", content_type = "application/octet-stream"),
