@@ -35,6 +35,7 @@ pub struct NewUserDevice {
 impl DouchatPool {
     pub fn insert_device(&self, new_device: NewUserDevice) -> Result<UserDevice> {
         let conn = &mut self.get_conn();
+        println!("1");
         let res = diesel::insert_into(user_devices::table)
             .values(&new_device)
             .on_conflict(user_devices::device_id)
@@ -45,6 +46,7 @@ impl DouchatPool {
                 user_devices::user_id.eq(&new_device.user_id),
             ))
             .get_result::<UserDevice>(conn)?;
+        println!("2");
         Ok(res)
     }
 

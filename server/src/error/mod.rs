@@ -76,6 +76,7 @@ impl ResponseError for DouchatError {
     }
 
     fn error_response(&self) -> actix_web::HttpResponse<actix_web::body::BoxBody> {
+        eprintln!("Douchat Error response: {:?}", &self);
         HttpResponseBuilder::new(self.status_code)
             .insert_header(ContentType::json())
             .body(serde_json::to_string(&self).unwrap())
