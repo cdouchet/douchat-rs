@@ -8,7 +8,8 @@ use crate::accounts::{
         __path_append_notification_token, __path_get_user_devices,
     },
     onboarding_routes::{
-        UsernameUpdateForm, __path_update_username, __path_upload_user_picture, complete_onboarding,
+        UsernameUpdateForm, __path_complete_onboarding, __path_update_username,
+        __path_upload_user_picture,
     },
 };
 use crate::cdn::picture::{QueryUid, __path_get_user_picture};
