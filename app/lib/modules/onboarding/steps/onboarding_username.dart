@@ -48,14 +48,22 @@ class _OnboardingUsernameState extends State<OnboardingUsername> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        DouchatTextInput(
-            controller: widget.usernameController, hintText: "Pierre Dupont"),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: DouchatTextInput(
+            controller: widget.usernameController,
+            hintText: "Pierre Dupont",
+          ),
+        ),
         const Spacer(),
-        ActionButton(
-          text: "Suivant",
-          onTap: widget.onTap,
-          isDisabled: isDisabled,
-          isLoading: widget.isLoading,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: ActionButton(
+            text: "Suivant",
+            onTap: widget.onTap,
+            isDisabled: isDisabled,
+            isLoading: widget.isLoading,
+          ),
         ),
       ],
     );

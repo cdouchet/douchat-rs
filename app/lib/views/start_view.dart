@@ -6,6 +6,7 @@ import 'package:app/providers/login_provider.dart';
 import 'package:app/providers/user_provider.dart';
 import 'package:app/router.dart';
 import 'package:app/views/login.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,16 @@ class _StartViewState extends State<StartView> {
       if (res.statusCode == 200) {
         context.read<UserProvider>().changeUser(res.data!);
         DeviceInfo.instance.getDeviceForm().then((form) {
-          api.getDevicesApi().appendDevice(appendUserDeviceForm: form);
+          api.getDevicesApi().appendDevice(appendUserDeviceForm: form).then((res) {
+            print(res);
+          }).catchError((err, st) {
+            if (err is DioException) {
+              print("error response data:");
+              print(err.response?.data);
+            }
+            print(err.response.data);
+            print(st);
+          });
         }).catchError((err, st) {
           print("Error sending device info");
           print(err);

@@ -30,6 +30,7 @@ class _OnboardingViewState extends State<OnboardingView> {
   final PageController pageController = PageController(initialPage: 0);
   final TextEditingController usernameController = TextEditingController();
   bool usernameLoading = false;
+  FilePickerResult? pickerResult;
 
   OnboardingStep _getStepFromIndex(int index) {
     switch (index) {
@@ -49,15 +50,17 @@ class _OnboardingViewState extends State<OnboardingView> {
     var form = UsernameUpdateFormBuilder();
     final username = usernameController.text.trim();
     if (username.isEmpty) {
-      showCustomSnackbar(context: context, text: "Votre nom d'utilisateur ne peut pas être vide");
+      showCustomSnackbar(
+          context: context,
+          text: "Votre nom d'utilisateur ne peut pas être vide");
       return;
     }
     form.username = username;
     try {
       setState(() => usernameLoading = true);
       final result = await api.getOnboardingApi().updateUsername(
-        usernameUpdateForm: form.build(),
-      );
+            usernameUpdateForm: form.build(),
+          );
       setState(() => usernameLoading = false);
       print("Update username result:");
       print(result.data);
@@ -87,10 +90,9 @@ class _OnboardingViewState extends State<OnboardingView> {
       allowCompression: false,
       allowMultiple: false,
       type: FileType.image,
+      withReadStream: true,
     );
-    if (result == null) {
-      return;
-    }
+    setState(() => pickerResult = result);
   }
 
   Widget _getContentFromStep(OnboardingStep step) {
@@ -127,7 +129,11 @@ class _OnboardingViewState extends State<OnboardingView> {
             },
             onTapLater: () => _nextStep());
       case OnboardingStep.profile:
-        return OnboardingProfile(onTapAddButton: onTapAddButton, onTap: () => _nextStep());
+        return OnboardingProfile(
+          onTapAddButton: onTapAddButton,
+          onTap: () => _nextStep(),
+          pickerResult: pickerResult,
+        );
     }
   }
 
@@ -139,24 +145,29 @@ class _OnboardingViewState extends State<OnboardingView> {
           onTap: () {
             FocusScope.of(context).unfocus();
           },
-          child: Container(
+          child: SizedBox(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.all(32.0),
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Text("Bienvenue",
-                        style: Theme.of(context).textTheme.titleLarge),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Row(
+                    children: [
+                      Text("Bienvenue",
+                          style: Theme.of(context).textTheme.titleLarge),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 70),
-                OnboardingSubtitle(
-                  step: _getStepFromIndex(
-                    !pageController.hasClients
-                        ? 0
-                        : pageController.page!.floor(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: OnboardingSubtitle(
+                    step: _getStepFromIndex(
+                      !pageController.hasClients
+                          ? 0
+                          : pageController.page!.floor(),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 10),

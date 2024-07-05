@@ -25,27 +25,38 @@ class _OnboardingNotificationsState extends State<OnboardingNotifications> {
     return Column(
       children: [
         const SizedBox(height: 20),
-        Column(
-          children: [
-            SvgPicture.asset(DouchatIcons.instance.chatBubble),
-            const SizedBox(height: 10),
-            Text(
-              "Activez les notifications pour être informé(e) de tous vos nouveaux messages",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.displayMedium,
-            ),
-          ],
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Column(
+            children: [
+              SvgPicture.asset(DouchatIcons.instance.chatBubble),
+              const SizedBox(height: 10),
+              Text(
+                "Activez les notifications pour être informé(e) de tous vos nouveaux messages",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.displayMedium,
+              ),
+            ],
+          ),
         ),
         const Spacer(),
-        Column(
-          children: [
-            ActionButton(text: "Activer", onTap: widget.onTapActivate, isLoading: false,),
-            const SizedBox(height: 20),
-            GestureDetector(
-              onTap: widget.onTapLater,
-              child: Text("Plus tard", style: Theme.of(context).textTheme.displayMedium),
-            ),
-          ],
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Column(
+            children: [
+              ActionButton(
+                text: "Activer",
+                onTap: widget.onTapActivate,
+                isLoading: false,
+              ),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: widget.onTapLater,
+                child: Text("Plus tard",
+                    style: Theme.of(context).textTheme.displayMedium),
+              ),
+            ],
+          ),
         )
       ],
     );
