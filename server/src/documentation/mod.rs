@@ -49,6 +49,8 @@ pub mod paths;
             PathUsername,
             AppendNotificationTokenForm,
             UserDevice,
+            UserPicture,
+            UserPictureMultipart,
             AppendUserDeviceForm,
             UsernameUpdateForm,
             DouchatError
