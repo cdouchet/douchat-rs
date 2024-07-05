@@ -1,8 +1,12 @@
+use std::io::Read;
+
 use crate::{
+    db::models::user_picture::{NewUserPicture, UserPicture, UserPictureMultipart},
     error::Result,
     security::jwt::{Access, DouchatJWTClaims},
     state::DouchatState,
 };
+use actix_multipart::form::MultipartForm;
 use actix_web::{
     patch, put,
     web::{Data, Json},
@@ -35,4 +39,36 @@ pub async fn update_username(
 ) -> Result<String> {
     state.db().update_username(claims.id, body.username)?;
     Ok(String::from("OK"))
+}
+
+#[utoipa::path(
+    put,
+    path = "/user/picture",
+    request_body(content = UserPictureMultipart, content_type = "multipart/form-data"),
+    responses(
+        (status = 200, description = "Successfully upserted user picture", body = UserPicture),
+        (status = 400, description = "Bad Request", body = DouchatError),
+        (status = 401, description = "Unauthorized", body = DouchatError),
+        (status = 500, description = "Internal Server Error", body = DouchatError),
+    )
+)]
+#[put("/user/picture")]
+pub async fn upload_user_picture(
+    state: Data<DouchatState>,
+    claims: DouchatJWTClaims<Access>,
+    MultipartForm(form): MultipartForm<UserPictureMultipart>,
+) -> Result<Json<UserPicture>> {
+    let res = state.db().insert_user_picture(NewUserPicture {
+        user_id: claims.id,
+        image_data: form
+            .file
+            .file
+            .bytes()
+            .map(|e| {
+                eprintln!("Error extracting image data in user picture: {:?}", e);
+                e.unwrap()
+            })
+            .collect(),
+    })?;
+    Ok(Json(res))
 }

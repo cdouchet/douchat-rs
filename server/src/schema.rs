@@ -89,6 +89,16 @@ diesel::table! {
 }
 
 diesel::table! {
+    user_pictures (id) {
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        id -> Int8,
+        user_id -> Int4,
+        image_data -> Bytea,
+    }
+}
+
+diesel::table! {
     users (id) {
         id -> Int4,
         uid -> Uuid,
@@ -114,6 +124,7 @@ diesel::joinable!(room_users -> users (user_id));
 diesel::joinable!(user_devices -> users (user_id));
 diesel::joinable!(user_notification_token -> user_devices (device_id));
 diesel::joinable!(user_notification_token -> users (user_id));
+diesel::joinable!(user_pictures -> users (user_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     contact_requests,
@@ -124,5 +135,6 @@ diesel::allow_tables_to_appear_in_same_query!(
     rooms,
     user_devices,
     user_notification_token,
+    user_pictures,
     users,
 );

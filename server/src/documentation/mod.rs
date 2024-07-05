@@ -7,11 +7,12 @@ use crate::accounts::{
         AppendNotificationTokenForm, AppendUserDeviceForm, __path_append_device,
         __path_append_notification_token, __path_get_user_devices,
     },
-    onboarding_routes::{UsernameUpdateForm, __path_update_username},
+    onboarding_routes::{UsernameUpdateForm, __path_update_username, __path_upload_user_picture},
 };
 use crate::db::models::{
     user::{NewUser, User},
     user_device::UserDevice,
+    user_picture::{UserPicture, UserPictureMultipart},
 };
 use crate::error::DouchatError;
 use crate::oauth::{
@@ -60,6 +61,7 @@ pub mod paths;
         get_user_devices,
         // Onboarding
         update_username,
+        upload_user_picture,
         // OAuth
         apple_auth,
         google_auth,

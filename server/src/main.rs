@@ -4,7 +4,7 @@ use accounts::{
     deep_link::{apple_app_site_association, asset_links_json},
     devices_routes::{append_device, append_notification_token, get_user_devices},
     get_user_by_uid, get_user_by_username, me,
-    onboarding_routes::update_username,
+    onboarding_routes::{update_username, upload_user_picture},
 };
 use actix::Actor;
 use actix_web::{
@@ -25,6 +25,7 @@ use state::DouchatState;
 use utoipa_swagger_ui::SwaggerUi;
 
 pub mod accounts;
+pub mod cdn;
 pub mod db;
 pub mod documentation;
 pub mod env;
@@ -81,6 +82,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .service(append_notification_token)
             // Onboarding
             .service(update_username)
+            .service(upload_user_picture)
             .service(SwaggerUi::new("/docs/{_:.*}").url("/api-docs/openapi.json", ApiDoc::create()))
     });
 
