@@ -61,15 +61,7 @@ pub async fn upload_user_picture(
 ) -> Result<Json<UserPicture>> {
     let res = state.db().insert_user_picture(NewUserPicture {
         user_id: claims.id,
-        image_data: form
-            .file
-            .file
-            .bytes()
-            .map(|e| {
-                eprintln!("Error extracting image data in user picture: {:?}", e);
-                e.unwrap()
-            })
-            .collect(),
+        image_data: form.file.file.bytes().map(|e| e.unwrap()).collect(),
     })?;
     Ok(Json(res))
 }
