@@ -2,12 +2,14 @@ use utoipa::{openapi::ServerBuilder, OpenApi};
 
 use self::paths::{PathId, PathUsername};
 use crate::accounts::{
-    __path_complete_onboarding, __path_get_user_by_uid, __path_get_user_by_username, __path_me,
+    __path_get_user_by_uid, __path_get_user_by_username, __path_me,
     devices_routes::{
         AppendNotificationTokenForm, AppendUserDeviceForm, __path_append_device,
         __path_append_notification_token, __path_get_user_devices,
     },
-    onboarding_routes::{UsernameUpdateForm, __path_update_username, __path_upload_user_picture},
+    onboarding_routes::{
+        UsernameUpdateForm, __path_update_username, __path_upload_user_picture, complete_onboarding,
+    },
 };
 use crate::cdn::picture::{QueryUid, __path_get_user_picture};
 use crate::db::models::{
@@ -67,6 +69,7 @@ pub mod paths;
         // Onboarding
         update_username,
         upload_user_picture,
+        complete_onboarding,
         // OAuth
         apple_auth,
         google_auth,
@@ -78,7 +81,6 @@ pub mod paths;
         get_user_by_uid,
         get_user_by_username,
         me,
-        complete_onboarding,
     )
 )]
 pub struct ApiDoc;

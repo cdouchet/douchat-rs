@@ -95,22 +95,3 @@ pub async fn me(state: Data<DouchatState>, claims: DouchatJWTClaims<Access>) -> 
             .ok_or(DouchatError::internal_server_error())?,
     ))
 }
-
-/// Complete Onboarding
-#[utoipa::path(
-    patch,
-    path = "/onboarding/complete",
-    tag = "Accounts",
-    responses(
-        (status = 200, description = "OK", body = String),
-        (status = 500, description = "Internal Server Error", body = DouchatError),
-    )
-)]
-#[patch("/onboarding/complete")]
-pub async fn complete_onboarding(
-    state: Data<DouchatState>,
-    claims: DouchatJWTClaims<Access>,
-) -> Result<String> {
-    state.db().complete_onboarding(claims.id)?;
-    Ok(String::from("Completed"))
-}

@@ -1,10 +1,9 @@
 use crate::env::API_PORT;
 use accounts::{
-    complete_onboarding,
     deep_link::{apple_app_site_association, asset_links_json},
     devices_routes::{append_device, append_notification_token, get_user_devices},
     get_user_by_uid, get_user_by_username, me,
-    onboarding_routes::{update_username, upload_user_picture},
+    onboarding_routes::{complete_onboarding, update_username, upload_user_picture},
 };
 use actix::Actor;
 use actix_web::{
