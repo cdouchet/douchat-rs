@@ -12,17 +12,13 @@ use serde::Serialize;
 use utoipa::ToSchema;
 use uuid::Uuid;
 
-#[derive(Identifiable, Serialize, Queryable, Associations, Debug, ToSchema, Clone)]
+#[derive(Identifiable, Queryable, Associations, Debug, ToSchema, Clone)]
 #[diesel(belongs_to(User, foreign_key = user_id))]
 #[diesel(table_name = user_pictures)]
 pub struct UserPicture {
-    #[serde(skip_serializing)]
     created_at: DateTime<Utc>,
-    #[serde(skip_serializing)]
     updated_at: DateTime<Utc>,
-    #[serde(skip_serializing)]
     id: i64,
-    #[serde(skip_serializing)]
     user_id: i32,
     pub image_data: Vec<u8>,
 }

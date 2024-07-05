@@ -58,12 +58,12 @@ pub async fn upload_user_picture(
     state: Data<DouchatState>,
     claims: DouchatJWTClaims<Access>,
     MultipartForm(form): MultipartForm<UserPictureMultipart>,
-) -> Result<Json<UserPicture>> {
-    let res = state.db().insert_user_picture(NewUserPicture {
+) -> Result<String> {
+    state.db().insert_user_picture(NewUserPicture {
         user_id: claims.id,
         image_data: form.file.file.bytes().map(|e| e.unwrap()).collect(),
     })?;
-    Ok(Json(res))
+    Ok(String::from("OK"))
 }
 
 /// Complete Onboarding
