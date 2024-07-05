@@ -47,7 +47,7 @@ pub async fn update_username(
     tag = "Onboarding",
     request_body(content = UserPictureMultipart, content_type = "multipart/form-data"),
     responses(
-        (status = 200, description = "Successfully upserted user picture", body = UserPicture),
+        (status = 200, description = "Successfully upserted user picture", body = String),
         (status = 400, description = "Bad Request", body = DouchatError),
         (status = 401, description = "Unauthorized", body = DouchatError),
         (status = 500, description = "Internal Server Error", body = DouchatError),
