@@ -37,6 +37,7 @@ pub struct NewUserPicture {
 #[derive(Debug, MultipartForm, ToSchema)]
 pub struct UserPictureMultipart {
     #[multipart(limit = "50MB")]
+    #[schema(value_type = String, format = Binary)]
     pub file: TempFile,
 }
 
