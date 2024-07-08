@@ -1,5 +1,5 @@
 use actix_web::{
-    get,
+    get, post,
     web::{Data, Json, Query},
 };
 use serde::Deserialize;
@@ -7,7 +7,10 @@ use uuid::Uuid;
 
 use crate::{
     db::models::{
-        messenger::{message::DouchatMessage, room::Room},
+        messenger::{
+            message::{DouchatMessage, NewDouchatMessage},
+            room::Room,
+        },
         user::User,
     },
     error::{DouchatError, Result},
@@ -64,4 +67,31 @@ pub async fn get_user_contacts(
             .get_user_contacts(claims.uid)?
             .ok_or(DouchatError::unauthorized())?,
     ))
+}
+
+#[derive(Deserialize)]
+pub struct SendMessageForm {
+    content: String,
+    room: Uuid,
+}
+
+#[post("/messages")]
+pub async fn send_message(
+    claims: DouchatJWTClaims<Access>,
+    state: Data<DouchatState>,
+    Json(body): Json<SendMessageForm>,
+) -> Result<Json<DouchatMessage>> {
+    let room = state
+        .db()
+        .get_room_by_uid(body.room)?
+        .ok_or(DouchatError::not_found(Some(format!(
+            "No room with id {}",
+            body.room
+        ))))?;
+    let message = state.db().create_message(NewDouchatMessage {
+        sender: claims.id,
+        room: room.id,
+        content: body.content,
+    })?;
+    Ok(Json(message))
 }

@@ -2,8 +2,8 @@ use crate::db::models::user::User;
 use crate::documentation::paths::{PathId, PathUsername};
 use crate::error::{DouchatError, Result};
 use crate::security::jwt::{Access, DouchatJWTClaims};
+use actix_web::get;
 use actix_web::web::{Data, Json, Path};
-use actix_web::{get, patch};
 use uuid::Uuid;
 
 use crate::state::DouchatState;

@@ -18,6 +18,7 @@ pub mod message_type;
 #[diesel(belongs_to(User, foreign_key = sender))]
 #[diesel(belongs_to(Room, foreign_key = room))]
 pub struct DouchatMessage {
+    #[serde(skip_serializing)]
     id: i64,
     uid: Uuid,
     created_at: DateTime<Utc>,
@@ -31,9 +32,9 @@ pub struct DouchatMessage {
 #[derive(Debug, Insertable)]
 #[diesel(table_name = messages)]
 pub struct NewDouchatMessage {
-    sender: i32,
-    room: i32,
-    content: String,
+    pub sender: i32,
+    pub room: i32,
+    pub content: String,
 }
 
 use crate::error::Result;

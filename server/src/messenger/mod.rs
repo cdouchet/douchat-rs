@@ -16,6 +16,7 @@ use self::{
 
 pub mod actions;
 pub mod messenger_routes;
+pub mod notification_service;
 pub mod parser;
 pub mod room;
 pub mod session;

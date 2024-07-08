@@ -55,7 +55,7 @@ use super::contact::NewContact;
 impl DouchatPool {
     pub fn create_contact_request(&self, request: NewContactRequest) -> Result<ContactRequest> {
         let conn = &mut self.get_conn();
-        let contact_request = contact_requests::table
+        contact_requests::table
             .filter(
                 contact_requests::receiver
                     .eq(request.receiver)

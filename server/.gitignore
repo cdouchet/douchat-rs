@@ -1,3 +1,4 @@
 .env
 target/
 google_secret.json
+firebase-credentials.json

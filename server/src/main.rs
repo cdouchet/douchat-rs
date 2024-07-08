@@ -19,7 +19,7 @@ use messenger::{
     ws,
 };
 use oauth::{apple::apple_auth, google::google_auth};
-use security::jwt::{create_test_user, refresh_access_token, test_ws};
+use security::jwt::{create_test_user_and_device, refresh_access_token, test_user, test_ws};
 use state::DouchatState;
 use utoipa_swagger_ui::SwaggerUi;
 
@@ -49,7 +49,7 @@ async fn index() -> String {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
     let state = DouchatState::new();
-    create_test_user(state.clone()).expect("Error: could not create test user");
+    create_test_user_and_device(state.clone()).expect("Error: could not create test user");
     let state_addr = state.clone().start();
     let app = HttpServer::new(move || {
         App::new()
@@ -82,6 +82,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             // Onboarding
             .service(update_username)
             .service(upload_user_picture)
+            // Test User TODO: TO REMOVE
+            .service(test_user)
             .service(SwaggerUi::new("/docs/{_:.*}").url("/api-docs/openapi.json", ApiDoc::create()))
     });
 

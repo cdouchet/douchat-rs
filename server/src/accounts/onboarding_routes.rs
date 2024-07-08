@@ -1,7 +1,7 @@
 use std::io::Read;
 
 use crate::{
-    db::models::user_picture::{NewUserPicture, UserPicture, UserPictureMultipart},
+    db::models::user_picture::{NewUserPicture, UserPictureMultipart},
     error::Result,
     security::jwt::{Access, DouchatJWTClaims},
     state::DouchatState,

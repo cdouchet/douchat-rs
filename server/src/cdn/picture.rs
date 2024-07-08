@@ -10,7 +10,6 @@ use uuid::Uuid;
 
 use crate::{
     error::{DouchatError, Result},
-    security::jwt::{Access, DouchatJWTClaims},
     state::DouchatState,
 };
 
@@ -32,10 +31,9 @@ pub struct QueryUid {
         (status = 500, description = "Internal Server Error", body = DouchatError),
     )
 )]
-#[get("/user/picture/{uid}")]
+#[get("/user/picture/{uid}.jpg")]
 pub async fn get_user_picture(
     state: Data<DouchatState>,
-    _: DouchatJWTClaims<Access>,
     Query(query): Query<QueryUid>,
 ) -> Result<HttpResponse> {
     let user_picture = state

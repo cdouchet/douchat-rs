@@ -1,5 +1,5 @@
 use crate::db::{models::user::User, DouchatPool};
-use crate::error::Result;
+use crate::error::{DouchatError, Result};
 use crate::schema::user_devices;
 use chrono::{DateTime, Utc};
 use diesel::{associations::Associations, deserialize::Queryable, prelude::Insertable};
@@ -31,6 +31,16 @@ pub struct NewUserDevice {
     pub device_name: String,
 }
 
+impl NewUserDevice {
+    pub fn test_device() -> Self {
+        Self {
+            user_id: 1,
+            device_id: "test_device".to_string(),
+            device_name: "Douchat Test Device".to_string(),
+        }
+    }
+}
+
 impl DouchatPool {
     pub fn insert_device(&self, new_device: NewUserDevice) -> Result<UserDevice> {
         let conn = &mut self.get_conn();
@@ -47,6 +57,20 @@ impl DouchatPool {
             .get_result::<UserDevice>(conn)?;
         println!("2");
         Ok(res)
+    }
+
+    pub fn get_device_by_device_id<'a>(&self, device_id: &'a str) -> Result<Option<UserDevice>> {
+        let conn = &mut self.get_conn();
+        let res = user_devices::table
+            .filter(user_devices::device_id.eq(device_id))
+            .get_result::<UserDevice>(conn);
+        match res {
+            Ok(e) => Ok(Some(e)),
+            Err(err) => match err {
+                diesel::result::Error::NotFound => Ok(None),
+                e => Err(DouchatError::from(e)),
+            },
+        }
     }
 
     pub fn get_user_devices(&self, user_id: i32) -> Result<UserDeviceList> {

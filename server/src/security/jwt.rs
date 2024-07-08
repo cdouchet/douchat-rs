@@ -1,7 +1,7 @@
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use crate::{
-    db::models::user::NewUser,
+    db::models::{user::NewUser, user_device::NewUserDevice},
     env::{JWT_ISSUER, JWT_SECRET},
     state::DouchatState,
     utils::response_with_token,
@@ -165,23 +165,27 @@ pub async fn refresh_access_token(
 
 // TO REMOVE !!!
 
-pub fn create_test_user(state: DouchatState) -> crate::error::Result<()> {
+pub fn create_test_user_and_device(state: DouchatState) -> crate::error::Result<()> {
     if let None = state.db().get_user_by_username("Test")? {
         let new_user = NewUser::test_user();
         state.db().create_user(new_user)?;
     }
+    if let None = state.db().get_device_by_device_id("test_device")? {
+        let new_device = NewUserDevice::test_device();
+        state.db().insert_device(new_device)?;
+    }
     Ok(())
 }
 
-// #[get("/test_user")]
-// pub async fn test_user(state: Data<DouchatState>) -> crate::error::Result<HttpResponse> {
-//     let user = state
-//         .db()
-//         .get_user_by_username("Test")?
-//         .expect("Error: Test user was not created");
-//     let claims = access_and_refresh(user.uid, user.id);
-//     return Ok(response_with_token(user, claims)?);
-// }
+#[get("/test_user")]
+pub async fn test_user(state: Data<DouchatState>) -> crate::error::Result<HttpResponse> {
+    let user = state
+        .db()
+        .get_user_by_username("Test")?
+        .expect("Error: Test user was not created");
+    let claims = access_and_refresh(user.uid, user.id, "test_device");
+    return Ok(response_with_token(user, claims)?);
+}
 
 #[get("/test_ws")]
 pub async fn test_ws() -> HttpResponse {

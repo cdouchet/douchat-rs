@@ -8,6 +8,7 @@ use std::fmt::Display;
 use utoipa::ToSchema;
 
 pub mod error_from_diesel;
+pub mod error_from_fcm;
 pub mod error_from_jwt;
 pub mod error_from_uuid;
 
