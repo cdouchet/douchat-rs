@@ -8,7 +8,6 @@ use chrono::{DateTime, Utc};
 use diesel::associations::Identifiable;
 use diesel::{associations::Associations, deserialize::Queryable, prelude::Insertable};
 use diesel::{BelongingToDsl, ExpressionMethods, RunQueryDsl};
-use serde::Serialize;
 use utoipa::ToSchema;
 use uuid::Uuid;
 

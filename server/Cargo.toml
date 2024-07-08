@@ -46,3 +46,4 @@ utoipa-swagger-ui = { version = "6.0.0", features = ["actix-web"] }
 utoipa = { version = "4.2.0", features = ["chrono", "time", "uuid", "url"] }
 actix-multipart = "0.6.2"
 fcm = "0.9.2"
+oauth_fcm = "0.1.0"

@@ -37,14 +37,14 @@ impl NotificationService {
 
     pub async fn send_notification<'a>(
         &self,
-        receiver: &'a str,
+        receiver_fcm_token: &'a str,
         payload: DouchatNotificationPayload<'a>,
     ) -> Result<(), DouchatError> {
-        let mut message_builder = fcm::MessageBuilder::new(&FIREBASE_API_KEY, receiver);
+        let mut message_builder = fcm::MessageBuilder::new(&FIREBASE_API_KEY, receiver_fcm_token);
         let mut notification_builder = fcm::NotificationBuilder::new();
         notification_builder.title(&payload.title);
         notification_builder.body(&payload.message);
-        message_builder.data(&payload);
+        message_builder.data(&payload)?;
 
         let notification = notification_builder.finalize();
         message_builder.notification(notification);

@@ -93,5 +93,6 @@ pub async fn send_message(
         room: room.id,
         content: body.content,
     })?;
+    // state.notifications().send_notification(receiver, payload);
     Ok(Json(message))
 }
