@@ -1,7 +1,9 @@
+use std::str::FromStr;
+
 use actix_web::{
     get,
     http::{header::ContentType, StatusCode},
-    web::{Data, Query},
+    web::{Data, Path, Query},
     HttpResponse,
 };
 use serde::Deserialize;
@@ -34,11 +36,11 @@ pub struct QueryUid {
 #[get("/user/picture/{uid}.jpg")]
 pub async fn get_user_picture(
     state: Data<DouchatState>,
-    Query(query): Query<QueryUid>,
+    query: Path<String>,
 ) -> Result<HttpResponse> {
     let user_picture = state
         .db()
-        .get_user_picture_from_uid(query.uid)?
+        .get_user_picture_from_uid(Uuid::from_str(&query.into_inner())?)?
         .ok_or(DouchatError::not_found(None))?;
     Ok(HttpResponse::build(StatusCode::OK)
         .content_type(ContentType::jpeg())
