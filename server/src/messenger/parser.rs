@@ -13,6 +13,7 @@ pub struct TestMessage {
 
 #[derive(Debug, Serialize, Deserialize, Message, Clone)]
 #[rtype(result = "Result<()>")]
+#[serde(rename_all = "lowercase")]
 pub enum WebsocketContent {
     SendMessage(TestMessage),
 }
