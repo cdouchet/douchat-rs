@@ -51,7 +51,7 @@ async fn index() -> String {
 
 #[get("/test_notif")]
 async fn test_send_notif(state: Data<DouchatState>) -> String {
-    let device_token = "eRKhJug8WkGikHVtksJiVi:APA91bFYk0O4wlDoCfRI--r0H_5VOljG0YV8rRMs_RfJhTaKztiCXKDoerIrNPscda_6NgCvTVQb_DrFacolRq9rBS44sJ4nY3xbixFu033JBacEvvTQSgpq5FScIR3Gzh7yJLkkoLnp";
+    let device_token = "dwkr8VRGP0VhnRhuerzSOs:APA91bGg2oZd0bf7i6CcoWZV0U-pKhPK_NfP6nuyTtTgTDWF1faUJ0hSrzo2VFoeQN-m0H1R4WP1L3O_XAep6KMlrLOm3rTmHB8l42wqrwdcBCnvqzBEqwN7WWeT38EcSqt1gbIoD2pw";
     let notification = Some(FcmNotification {
         title: String::from("Test notiiiif"),
         body: String::from("HELOOOOO"),

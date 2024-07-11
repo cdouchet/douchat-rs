@@ -1,5 +1,6 @@
 use actix::{Actor, Addr, Handler};
-use actix_web::{get, HttpRequest, HttpResponse};
+use actix_web::{cookie::Cookie, get, web::Query, HttpRequest, HttpResponse};
+use serde::Deserialize;
 
 use crate::{
     error::DouchatError,
@@ -78,14 +79,20 @@ impl Handler<WebsocketContent> for DouchatState {
     }
 }
 
+#[derive(Deserialize)]
+pub struct TokenQueryParameter {
+    token: String,
+}
+
 #[get("/ws")]
 pub async fn ws(
     req: HttpRequest,
     stream: actix_web::web::Payload,
     state_addr: actix_web::web::Data<Addr<DouchatState>>,
     state: actix_web::web::Data<DouchatState>,
-    token: DouchatJWTClaims<Access>,
+    query: Query<TokenQueryParameter>,
 ) -> crate::error::Result<HttpResponse> {
+    let token = DouchatJWTClaims::<Access>::try_from(Cookie::new("t", &query.token))?;
     let user = state
         .db()
         .get_user_by_uid(token.uid)?

@@ -99,12 +99,12 @@ pub fn access_and_refresh<'a>(
     )
 }
 
-impl<T: DouchatTokenType + DeserializeOwned + 'static> TryFrom<Cookie<'static>>
+impl<'a, T: DouchatTokenType + DeserializeOwned + 'static> TryFrom<Cookie<'a>>
     for DouchatJWTClaims<T>
 {
     type Error = DouchatError;
 
-    fn try_from(value: Cookie<'static>) -> Result<Self, Self::Error> {
+    fn try_from(value: Cookie<'a>) -> Result<Self, Self::Error> {
         let decoding_key = DecodingKey::from_secret(JWT_SECRET.as_bytes());
         let validation = Validation::default();
         decode::<Self>(value.value(), &decoding_key, &validation)
