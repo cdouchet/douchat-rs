@@ -5,7 +5,7 @@ use crate::{
 };
 use actix_web::{
     post,
-    web::{Data, Form, Json},
+    web::{Data, Json},
     HttpResponse,
 };
 use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};

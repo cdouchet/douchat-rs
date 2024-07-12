@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use crate::env::API_PORT;
 use accounts::{
     deep_link::{apple_app_site_association, asset_links_json},
@@ -15,16 +17,19 @@ use actix_web::{
 use cdn::picture::get_user_picture;
 use documentation::ApiDoc;
 use dotenvy::dotenv;
-use media::get_login_background;
+use error::DouchatError;
+use fcm::Error;
+use http::HTTP_CLIENT;
 use messenger::{
     messenger_routes::{get_user_contacts, get_user_rooms},
     ws,
 };
 use oauth::{apple::apple_auth, google::google_auth};
-use oauth_fcm::{send_fcm_message, FcmNotification};
+use oauth_fcm::{send_fcm_message, FcmError, FcmNotification, NetworkError};
 use security::jwt::{create_test_user_and_device, refresh_access_token, test_user, test_ws};
 use serde_json::json;
 use state::DouchatState;
+use utils::rust_vars::CARGO_MANIFEST_DIR;
 use utoipa_swagger_ui::SwaggerUi;
 
 pub mod accounts;
@@ -34,7 +39,6 @@ pub mod documentation;
 pub mod env;
 pub mod error;
 pub mod http;
-pub mod media;
 pub mod messenger;
 pub mod oauth;
 pub mod schema;
@@ -50,8 +54,8 @@ async fn index() -> String {
 }
 
 #[get("/test_notif")]
-async fn test_send_notif(state: Data<DouchatState>) -> String {
-    let device_token = "dwkr8VRGP0VhnRhuerzSOs:APA91bGg2oZd0bf7i6CcoWZV0U-pKhPK_NfP6nuyTtTgTDWF1faUJ0hSrzo2VFoeQN-m0H1R4WP1L3O_XAep6KMlrLOm3rTmHB8l42wqrwdcBCnvqzBEqwN7WWeT38EcSqt1gbIoD2pw";
+async fn test_send_notif(state: Data<DouchatState>) -> crate::error::Result<String> {
+    let device_token = "fCyAoJFiCU2-ub7hy_nXSJ:APA91bFXueHPj5crKnpeOtu-xF64QMJMAlDERJsdPgxz-uXHvhbGwyZoIvqffNQ0V4loArbTwcPieEAP6NwexII5zQgKSuuDXHuDfcacR0oMMgIa-wB8ChdjiUEoF63EUXNMh4jzVbWB";
     let notification = Some(FcmNotification {
         title: String::from("Test notiiiif"),
         body: String::from("HELOOOOO"),
@@ -64,16 +68,56 @@ async fn test_send_notif(state: Data<DouchatState>) -> String {
         "sender_uuid": "5ba80ac1-5ae5-47d9-96a0-99db6972568d"
     });
 
-    send_fcm_message(
-        device_token,
-        notification,
-        Some(payload),
-        state.token_manager(),
-        "douchatrs",
-    )
-    .await
-    .expect("Failed to send notif");
-    String::from("OK")
+    let collapse_id = "93823923809283293890203";
+
+    let mut token_manager_guard = state.token_manager().lock().await;
+    let access_token = token_manager_guard.get_token().await?;
+
+    let fcm_payload = json!({
+        "message": {
+            "token": device_token,
+            "notification": {
+                "title": "Test title",
+                "body": "Hellooooooo",
+            },
+            "apns": {
+                "headers": {
+                    // "apns-priority": "5",
+                    // "apns-collapse-id": collapse_id,
+                },
+                "payload": {
+                    "aps": {
+                        "alert": {
+                            "title": "Test title",
+                            "body": "J'aime bien tout ça",
+                        },
+                        "mutable-content": 1
+                    }
+                },
+            },
+            "data": {
+                "title": "Test title",
+                "message": "HelooooooMessageeee",
+                "avatar": "https://douchat-api.doggo-saloon.net/user/picture/5ba80ac1-5ae5-47d9-96a0-99db6972568d.jpg",
+                "sender_nickname": "Zyril",
+                "sender_uuid": "5ba80ac1-5ae5-47d9-96a0-99db6972568d",
+                "room_id": "5ba80ac1-5ae5-47d9-96a0-99db6972568d",
+            }
+        }
+    });
+
+    let url = "https://fcm.googleapis.com/v1/projects/douchatrs/messages:send";
+
+    let res = HTTP_CLIENT
+        .post(url)
+        .bearer_auth(access_token)
+        .json(&fcm_payload)
+        .send()
+        .await;
+    if let Err(err) = res {
+        return Ok(format!("FAILURE: {}", &err));
+    }
+    Ok(String::from("OK"))
 }
 
 #[actix_web::main]
@@ -88,7 +132,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .app_data(Data::new(state.clone()))
             .app_data(Data::new(state_addr.clone()))
             .route("/", get().to(index))
-            .service(get_login_background)
             .service(get_user_by_uid)
             .service(get_user_by_username)
             .service(me)

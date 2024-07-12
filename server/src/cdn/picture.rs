@@ -3,7 +3,7 @@ use std::str::FromStr;
 use actix_web::{
     get,
     http::{header::ContentType, StatusCode},
-    web::{Data, Path, Query},
+    web::{Data, Path},
     HttpResponse,
 };
 use serde::Deserialize;
@@ -16,6 +16,7 @@ use crate::{
 };
 
 #[derive(Deserialize, IntoParams, ToSchema)]
+#[allow(dead_code)]
 pub struct QueryUid {
     uid: Uuid,
 }

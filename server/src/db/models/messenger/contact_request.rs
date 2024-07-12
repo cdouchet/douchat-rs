@@ -22,6 +22,7 @@ use crate::{
 #[diesel(table_name = contact_requests)]
 #[diesel(belongs_to(User, foreign_key = sender))]
 #[diesel(primary_key(id))]
+#[allow(dead_code)]
 pub struct ContactRequest {
     pub id: i32,
     created_at: DateTime<Utc>,

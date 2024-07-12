@@ -23,7 +23,13 @@ use crate::oauth::{
     apple::{AppleName, AppleOauthPayload, AppleUser, __path_apple_auth},
     google::{GoogleOAuthPayload, __path_google_auth},
 };
-use crate::security::jwt::__path_refresh_access_token;
+use crate::security::{
+    jwt::__path_refresh_access_token,
+    user_info_jwt::{
+        UserInfo, UserInfoJWTClaims, __path_get_info_from_user_info_token,
+        __path_get_user_info_token,
+    },
+};
 
 use crate::env::API_BASE_URL;
 
@@ -45,6 +51,8 @@ pub mod paths;
     components(
         schemas(
             User,
+            UserInfo,
+            UserInfoJWTClaims,
             NewUser,
             AppleOauthPayload,
             AppleUser,
@@ -82,6 +90,8 @@ pub mod paths;
         get_user_by_uid,
         get_user_by_username,
         me,
+        get_user_info_token,
+        get_info_from_user_info_token,
     )
 )]
 pub struct ApiDoc;

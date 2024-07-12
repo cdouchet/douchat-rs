@@ -18,6 +18,7 @@ use crate::{
 #[diesel(table_name = contacts)]
 #[diesel(belongs_to(User, foreign_key = user_id))]
 #[diesel(primary_key(user_id, contact_id))]
+#[allow(dead_code)]
 pub struct Contact {
     #[serde(skip_serializing)]
     created_at: DateTime<Utc>,
