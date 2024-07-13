@@ -119,7 +119,6 @@ pub struct UserInfo {
     get,
     path = "/user/info_token/data",
     tag = "Accounts",
-    request_body = UserInfoJWTClaims,
     responses(
         (status = 200, description = "Successfully fetched user_info_token as cookie", body = UserInfo),
         (status = 401, description = "Unauthorized", body = DouchatError),
