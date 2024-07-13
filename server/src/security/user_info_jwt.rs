@@ -1,10 +1,11 @@
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use actix_web::{
-    cookie::Cookie,
+    cookie::{time::OffsetDateTime, Cookie, CookieBuilder},
     get,
+    http::StatusCode,
     web::{Data, Json},
-    FromRequest,
+    FromRequest, HttpResponse, HttpResponseBuilder,
 };
 use diesel::{deserialize::Queryable, ExpressionMethods, QueryDsl, RunQueryDsl};
 use jsonwebtoken::{decode, DecodingKey, Validation};
@@ -53,6 +54,23 @@ impl<'a> TryFrom<Cookie<'a>> for UserInfoJWTClaims {
     }
 }
 
+impl<'a> TryInto<Cookie<'a>> for UserInfoJWTClaims {
+    type Error = DouchatError;
+
+    fn try_into(self) -> Result<Cookie<'a>, Self::Error> {
+        let expires = OffsetDateTime::now_utc() + Duration::from_secs(60 * 5);
+        let header = jsonwebtoken::Header::default();
+        let encoding_key = jsonwebtoken::EncodingKey::from_secret(JWT_SECRET.as_bytes());
+        let jwt = jsonwebtoken::encode(&header, &self, &encoding_key)?;
+        Ok(CookieBuilder::new("user_info_token", jwt)
+            .path("/")
+            .secure(true)
+            .http_only(true)
+            .expires(expires)
+            .finish())
+    }
+}
+
 impl FromRequest for UserInfoJWTClaims {
     type Error = DouchatError;
     type Future = futures::future::Ready<Result<Self, Self::Error>>;
@@ -73,7 +91,7 @@ impl FromRequest for UserInfoJWTClaims {
     path = "/user/info_token",
     tag = "Accounts",
     responses(
-        (status = 200, description = "Successfully fetched user_info_token as cookie", body = UserInfoJWTClaims),
+        (status = 200, description = "Successfully fetched user_info_token as cookie", body = String),
         (status = 401, description = "Unauthorized", body = DouchatError),
         (status = 500, description = "Internal Server Error", body = DouchatError),
     )
@@ -81,9 +99,13 @@ impl FromRequest for UserInfoJWTClaims {
 #[get("/user/info_token")]
 pub async fn get_user_info_token(
     claims: DouchatJWTClaims<Access>,
-) -> crate::error::Result<Json<UserInfoJWTClaims>> {
+) -> crate::error::Result<HttpResponse> {
     let user_info_claims = UserInfoJWTClaims::new(claims.uid);
-    Ok(Json(user_info_claims))
+    let cookie: Cookie = user_info_claims.try_into()?;
+    let response = HttpResponseBuilder::new(StatusCode::OK)
+        .cookie(cookie)
+        .body("OK");
+    Ok(response)
 }
 
 #[derive(Debug, Queryable, Serialize, Deserialize, ToSchema)]
@@ -108,11 +130,8 @@ pub struct UserInfo {
 #[get("/user/info_token/data")]
 pub async fn get_info_from_user_info_token(
     state: Data<DouchatState>,
-    Json(body): Json<UserInfoJWTClaims>,
+    claims: UserInfoJWTClaims,
 ) -> crate::error::Result<Json<UserInfo>> {
-    let body_str = serde_json::to_string(&body).unwrap();
-    let cookie = Cookie::new("user_info_token", body_str);
-    let claims = UserInfoJWTClaims::try_from(cookie)?;
     use crate::schema::users;
     let conn = &mut state.db().get_conn();
     let res = users::table
