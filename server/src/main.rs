@@ -26,7 +26,10 @@ use messenger::{
 };
 use oauth::{apple::apple_auth, google::google_auth};
 use oauth_fcm::{send_fcm_message, FcmError, FcmNotification, NetworkError};
-use security::jwt::{create_test_user_and_device, refresh_access_token, test_user, test_ws};
+use security::{
+    jwt::{create_test_user_and_device, refresh_access_token, test_user, test_ws},
+    user_info_jwt::{get_info_from_user_info_token, get_user_info_token},
+};
 use serde_json::json;
 use state::DouchatState;
 use utils::rust_vars::CARGO_MANIFEST_DIR;
@@ -132,12 +135,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .app_data(Data::new(state.clone()))
             .app_data(Data::new(state_addr.clone()))
             .route("/", get().to(index))
+            // Accounts
             .service(get_user_by_uid)
             .service(get_user_by_username)
             .service(me)
             .service(complete_onboarding)
             .service(apple_auth)
             .service(google_auth)
+            .service(get_user_info_token)
+            .service(get_info_from_user_info_token)
+            // Messenger
             .service(test_ws)
             .service(ws)
             .service(web::scope("/security").service(refresh_access_token))
